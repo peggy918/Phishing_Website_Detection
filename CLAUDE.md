@@ -76,7 +76,7 @@ phishguard/
 
 - [x] 規劃完成（2026-10-31）
 - [x] 階段 0：環境建立、資料清理（政府 XML、Kaggle CSV）、台灣正常網域、brands.yaml（2026-10-31；Tranco 待補、brands.yaml 待本人核對）
-- [ ] 階段 1：normalizer + features + 單元測試
+- [x] 階段 1：normalizer + brand_match + features + 單元測試（2026-11-01；169 項測試）
 - [ ] 階段 2：三模型訓練與評估、決定門檻
 - [ ] 階段 3：Flask MVC + 資料庫 + 偵測頁 + 管理者匯入
 - [ ] 階段 4：紀錄、安全、E2E、重建驗證

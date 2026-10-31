@@ -6,7 +6,7 @@
 #         只保留註冊網域，CDN 主機（full:）與非台灣相關網域不收。未註明者為 AI 依常識整理。
 # related_domains：同集團但不同公司的網域（例如國泰人壽之於國泰世華）。列入白名單，但不是該品牌的官方網域。
 # 2026-10-31 以 TWNIC WHOIS 核對註冊者後補入的網域，原始回應見 data/reference/whois/。
-version: "2026.10.31-3"
+version: "2026.11.01-1"
 
 brands:
   - key: momo
@@ -27,7 +27,7 @@ brands:
     name: 蝦皮購物
     aliases: [蝦皮, shopee]
     domains: [shopee.tw, shopee.com, shp.ee, shopeemobile.com, shopeepay.tw]
-    keywords: [shopee, shoppe]
+    keywords: [shopee]  # 不放 shoppe：會命中 shopping、shoppers，由近似比對處理
     source: v2fly
     verified: false
   - key: rakuten
