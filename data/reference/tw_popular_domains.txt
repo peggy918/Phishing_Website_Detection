@@ -1,0 +1,92 @@
+# 台灣常見正常網域（註冊網域 eTLD+1），一行一個，# 開頭為註解。
+# 來源：由 AI 依常識整理（2026-10-31），需本人逐一核對；之後以 Tranco 清單補充。
+# 分類：category 寫在網域後面（以空白分隔）
+
+# 政府
+gov.taipei government
+president.gov.tw government
+ey.gov.tw government
+moi.gov.tw government
+mohw.gov.tw government
+nhi.gov.tw government
+cdc.gov.tw government
+cwa.gov.tw government
+npa.gov.tw government
+moe.gov.tw government
+mvdis.gov.tw government
+railway.gov.tw government
+fsc.gov.tw government
+moea.gov.tw government
+
+# 大學
+ntu.edu.tw education
+nthu.edu.tw education
+nycu.edu.tw education
+ncku.edu.tw education
+nccu.edu.tw education
+ntnu.edu.tw education
+ncu.edu.tw education
+ntust.edu.tw education
+fju.edu.tw education
+tku.edu.tw education
+
+# 新聞媒體
+udn.com news
+chinatimes.com news
+ltn.com.tw news
+ettoday.net news
+setn.com news
+tvbs.com.tw news
+cna.com.tw news
+storm.mg news
+pts.org.tw news
+nownews.com news
+cw.com.tw news
+businessweekly.com.tw news
+
+# 社群、論壇、入口
+pixnet.net community
+dcard.tw community
+ptt.cc community
+mobile01.com community
+gamer.com.tw community
+
+# 求職、房屋
+104.com.tw jobs
+1111.com.tw jobs
+591.com.tw housing
+sinyi.com.tw housing
+
+# 購物、零售
+ruten.com.tw shopping
+eslite.com shopping
+carrefour.com.tw shopping
+pxmart.com.tw shopping
+costco.com.tw shopping
+coolpc.com.tw shopping
+kktix.com ticket
+tixcraft.com ticket
+ibon.com.tw shopping
+
+# 電信
+cht.com.tw telecom
+fetnet.net telecom
+taiwanmobile.com telecom
+
+# 金融
+firstbank.com.tw finance
+megabank.com.tw finance
+landbank.com.tw finance
+tcb-bank.com.tw finance
+hncb.com.tw finance
+sinopac.com finance
+fubon.com finance
+jkopay.com finance
+twse.com.tw finance
+
+# 交通、旅遊
+thsrc.com.tw transport
+metro.taipei transport
+eztravel.com.tw travel
+liontravel.com travel
+kkday.com travel

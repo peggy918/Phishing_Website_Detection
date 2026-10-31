@@ -1,0 +1,39 @@
+# PhishGuard 規則設定。偵測結果會記錄 version，修改內容時請同步調整版本號。
+version: "2026.10.31-3"
+
+# 正規化時移除的追蹤參數（完整名稱或前綴）
+tracking_params:
+  exact: [fbclid, gclid, ttclid, wbraid, gbraid, mibextid, sfnsn, igshid, yclid, msclkid, dclid, twclid, li_fat_id, campaign_id, adset_id, ad_id, act]
+  prefixes: [utm_]
+
+# 常見詐騙網域結尾（政府通報資料中出現頻率高者）
+suspicious_tlds: [top, shop, cyou, icu, sbs, bond, xyz, online, store, life, my, cc, vip, buzz, cfd, ink, site, space, live, fun, club, beer, bid, qpon, xin, lat, pw, lol, click, art, asia, one]
+
+# 免費架站／代管平台：註冊網域屬於平台，黑名單須比對完整主機名
+platform_domains: [github.io, carrd.co, netlify.app, weebly.com, cloudfront.net, vercel.app, pse.is, ubpages.com, myfreesites.net, wixsite.com, blogspot.com, web.app, firebaseapp.com, pages.dev, glitch.me, herokuapp.com, onrender.com, 000webhostapp.com, wordpress.com, notion.site,
+  # 台灣：使用者可自建子網域的服務（部落格、ISP 動態主機），不可整個註冊網域列入白名單
+  pixnet.net, hinet.net, xuite.net,
+  # 出租／免費子網域服務：由 Tranco 交叉比對政府黑名單時發現（991/994 it.com、1391 eu.cc、175 ooguy.com、933 ccaiplatform.com）
+  it.com, eu.cc, ooguy.com, ccaiplatform.com]
+
+# 短網址服務
+shortener_domains: [bit.ly, tinyurl.com, goo.gl, t.co, ow.ly, is.gd, reurl.cc, ppt.cc, lihi.cc, lihi1.cc, lihi2.cc, lihi3.cc, pse.is, cutt.ly, rebrand.ly, shorturl.at, s.id, rb.gy, tiny.cc]
+
+# 網址中常見的可疑關鍵字
+suspicious_keywords: [login, signin, verify, verification, account, secure, update, confirm, banking, password, wallet, payment, refund, invoice, support, service, customer, official, help, wap, activity]
+
+# 同形字正規化（品牌近似比對前使用）
+homoglyphs:
+  "0": o
+  "1": l
+  "3": e
+  "4": a
+  "5": s
+  "7": t
+  "8": b
+  rn: m
+  vv: w
+  cl: d
+
+# 政府資料中疑似一般網站或遭入侵網站：不作為典型正例，標記待人工確認
+review_domains: [ecpay.com, hsblood.org.cn, shopex.cn, amsdi.com.ph, googleinvest.com]

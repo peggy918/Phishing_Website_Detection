@@ -1,0 +1,45 @@
+﻿domain,brand_key,decision,evidence,registrant,reviewer,reviewed_at,trigger,tranco_rank,note
+dcard.cc,dcard,official,manual_website,,user,2026-10-31,not_in_tranco,,
+dcard.io,dcard,removed,manual_website,,user,2026-10-31,not_in_tranco,,無法連上這個網站
+dcard.link,dcard,official,manual_website,,user,2026-10-31,not_in_tranco,,
+gogolook.com,gogolook,official,manual_website,,user,2026-10-31,not_in_tranco,,
+linefriends.com.tw,line,removed,manual_website,,user,2026-10-31,not_in_tranco,,無法連上這個網站
+linemyshop.com,line,official,manual_website,,user,2026-10-31,not_in_tranco,,
+mcdonalds.com.tw,mcdonalds,official,manual_website,,user,2026-10-31,not_in_tranco,,
+momo5188.com,momo,official,manual_website,,user,2026-10-31,not_in_tranco,,
+pchomeec.tw,pchome,official,manual_website,,user,2026-10-31,not_in_tranco,,
+pchomeonline.com.tw,pchome,official,manual_website,,user,2026-10-31,not_in_tranco,,
+pchomepay.com.tw,pchome,official,manual_website,,user,2026-10-31,not_in_tranco,,
+piapp.com.tw,pchome,official,manual_website,,user,2026-10-31,not_in_tranco,,
+soft-world.com.tw,softworld,official,manual_website,,user,2026-10-31,not_in_tranco,,
+pchomebiz.com.tw,pchome,official,manual_website,,user,2026-10-31,brand_keyword_in_tranco,55871,
+4gamers.com.tw,bahamut,not_brand,twnic_whois,就肆電競股份有限公司,claude,2026-10-31,brand_keyword_in_tranco,62096,WHOIS 註冊者「就肆電競股份有限公司」，非巴哈姆特
+hinet.tw,cht,official,twnic_whois,"Network Technology Group, Chunghwa Telecom Co., Ltd.",claude,2026-10-31,brand_keyword_in_tranco,82294,WHOIS 註冊者 Chunghwa Telecom（中華電信）
+cathaylife.com.tw,cathay,related,twnic_whois,國泰人壽保險股份有限公司,claude,2026-10-31,brand_keyword_in_tranco,115083,WHOIS「國泰人壽保險股份有限公司」
+chinapost.com.tw,post,not_brand,twnic_whois,今日傳媒股份有限公司,claude,2026-10-31,brand_keyword_in_tranco,115660,WHOIS「今日傳媒股份有限公司」（NOWnews），不是中華郵政
+cathaysec.com.tw,cathay,related,twnic_whois,Cathay Securities Corporation,claude,2026-10-31,brand_keyword_in_tranco,133542,WHOIS「Cathay Securities Corporation」（國泰證券）
+momo.com.tw,momo,official,twnic_whois,富邦媒體科技股份有限公司,claude,2026-10-31,brand_keyword_in_tranco,140842,WHOIS「富邦媒體科技股份有限公司」
+cathay-cube.com.tw,cathay,official,twnic_whois,國泰世華商業銀行股份有限公司,claude,2026-10-31,brand_keyword_in_tranco,146615,WHOIS「國泰世華商業銀行股份有限公司」
+cathay-ins.com.tw,cathay,related,twnic_whois,國泰世紀產物保險股份有限公司,claude,2026-10-31,brand_keyword_in_tranco,175917,WHOIS「國泰世紀產物保險股份有限公司」
+foodpanda.tw,foodpanda,official,manual_website,,user,2026-10-31,brand_keyword_in_tranco,239541,
+cavesbooks.com.tw,books,not_brand,manual_website,,user,2026-10-31,brand_keyword_in_tranco,257813,敦煌書局（本人確認為正常網站）
+linebank.com.tw,line,related,twnic_whois,LY Corporation,claude,2026-10-31,brand_keyword_in_tranco,263420,WHOIS「LY Corporation」（LINE 母公司）
+yabeline.tw,line,not_brand,twnic_whois,(個人，已遮蔽),claude,2026-10-31,brand_keyword_in_tranco,288694,WHOIS 註冊者為個人（(個人，已遮蔽)）
+esunsec.com.tw,esun,related,twnic_whois,玉山綜合證券股份有限公司,claude,2026-10-31,brand_keyword_in_tranco,332262,WHOIS「玉山綜合證券股份有限公司」
+pchome.tw,pchome,official,manual_website,,user,2026-10-31,brand_keyword_in_tranco,354454,
+shopeepay.tw,shopee,official,twnic_whois,ShopeePay Private Limited,claude,2026-10-31,brand_keyword_in_tranco,375114,WHOIS「ShopeePay Private Limited」（Sea 集團）
+postmall.com.tw,post,official,twnic_whois,中華郵政股份有限公司,claude,2026-10-31,brand_keyword_in_tranco,424170,WHOIS「中華郵政股份有限公司」
+ebookservice.tw,books,not_brand,manual_website,,user,2026-10-31,brand_keyword_in_tranco,436113,本人確認為正常網站
+lineage182.tw,line,not_brand,twnic_whois,,claude,2026-10-31,brand_keyword_in_tranco,456456,WHOIS 隱私遮蔽；名稱為遊戲「天堂（Lineage）」私服
+familystar.org.tw,family,not_brand,twnic_whois,親子觀星會,claude,2026-10-31,brand_keyword_in_tranco,457460,WHOIS「親子觀星會」
+rakuten-bank.com.tw,rakuten,related,twnic_whois,Waterland Financial Holdings,claude,2026-10-31,brand_keyword_in_tranco,508117,WHOIS「Waterland Financial Holdings」（國票金控，與樂天合資樂天銀行）
+cathayhotel.com.tw,cathay,not_brand,twnic_whois,Cathay Hospitality Management Corporation Limited,claude,2026-10-31,brand_keyword_in_tranco,517202,WHOIS「Cathay Hospitality Management」（國泰商旅）
+cathaysite.com.tw,cathay,related,twnic_whois,國泰證券投資信託股份有限公司,claude,2026-10-31,brand_keyword_in_tranco,532739,WHOIS「國泰證券投資信託股份有限公司」
+govbooks.com.tw,books,not_brand,manual_website,,user,2026-10-31,brand_keyword_in_tranco,576310,國家網路書店（本人確認為正常網站）
+ctbc.edu.tw,ctbc,not_brand,unverifiable,,claude,2026-10-31,brand_keyword_in_tranco,703769,.edu.tw 由教育部 TANet 管理；不列入品牌
+familyshoes.com.tw,family,not_brand,twnic_whois,MERCURIES ASSOCIATES,claude,2026-10-31,brand_keyword_in_tranco,707039,WHOIS「MERCURIES ASSOCIATES」（三商），非全家
+teams.com.tw,microsoft,not_brand,twnic_whois,HAN LIN EDUCATION TECHNOLOGUY CO.LTD,claude,2026-10-31,brand_keyword_in_tranco,725203,WHOIS「HAN LIN EDUCATION TECHNOLOGY」（翰林），非 Microsoft
+taishinart.org.tw,taishin,related,twnic_whois,財團法人台新銀行文化藝術基金會,claude,2026-10-31,brand_keyword_in_tranco,855227,WHOIS「財團法人台新銀行文化藝術基金會」
+fast-line.tw,line,not_brand,twnic_whois,,claude,2026-10-31,brand_keyword_in_tranco,856012,WHOIS 隱私遮蔽，名稱與 LINE 無關
+moto-lines.com.tw,line,not_brand,twnic_whois,"Moto-Lines Co., Ltd.",claude,2026-10-31,brand_keyword_in_tranco,914735,"WHOIS「Moto-Lines Co., Ltd.」"
+hinetcdn.net.tw,cht,official,twnic_whois,Data Communication Business Group,claude,2026-10-31,brand_keyword_in_tranco,998177,WHOIS「Data Communication Business Group」，信箱 cht.com.tw（中華電信）

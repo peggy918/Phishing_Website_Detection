@@ -1,0 +1,20 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.coverage
+htmlcov/
+.env
+
+# 原始資料與處理後資料不進 git（來源與雜湊見 data/raw/README.md）
+data/raw/*
+!data/raw/README.md
+data/processed/*
+!data/processed/.gitkeep
+
+# 模型檔
+models_store/
+*.joblib
+
+# 學校評分文件不公開到 GitHub
+docs/rubric/
