@@ -22,6 +22,7 @@
 | 初審範圍 | 網址輸入 → 正規化 → 黑名單 → 白名單／品牌 → ML → 風險與原因 → 存檔；管理者匯入政府 XML |
 | 複審新增 | 截圖 OCR（Tesseract chi_tra+eng，不佳再評估 PaddleOCR）、165 話術規則、品牌交叉比對、外部使用者測試 |
 | 外部連線 | 複審使用者測試時以 Cloudflare Quick Tunnel 對外 |
+| 風險判定 | 模型兩個門檻（在驗證集決定）＋品牌規則：疑似冒用品牌至少中風險（`app/services/risk.py`） |
 
 ## 絕對不做
 
@@ -77,7 +78,7 @@ phishguard/
 - [x] 規劃完成（2026-10-31）
 - [x] 階段 0：環境建立、資料清理（政府 XML、Kaggle CSV）、台灣正常網域、brands.yaml（2026-10-31；Tranco 待補、brands.yaml 待本人核對）
 - [x] 階段 1：normalizer + brand_match + features + 單元測試（2026-11-01；169 項測試）
-- [ ] 階段 2：三模型訓練與評估、決定門檻
+- [x] 階段 2：三模型訓練與評估、決定門檻（2026-11-03；LightGBM，中 0.425／高 0.797；結果見 `docs/results/stage2-evaluation.md`）
 - [ ] 階段 3：Flask MVC + 資料庫 + 偵測頁 + 管理者匯入
 - [ ] 階段 4：紀錄、安全、E2E、重建驗證
 - [ ] 階段 5：初審文件撰寫（11/9–11/10）

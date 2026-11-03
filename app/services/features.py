@@ -9,6 +9,8 @@
 - scheme（http／https）：政府資料 56 筆缺 scheme、台灣正常網域只有網域，補上的 scheme 是清理時加的，
   不是網址本身的性質，模型會學到資料來源而非詐騙特徵
 - 是否為品牌官方網域：官方網域在白名單階段就處理，不會進到模型
+- 是否為 .tw：台灣正常網域 97% 是 .tw、政府詐騙只有 1%，模型會學成「.tw＝正常」，
+  漏掉政府資料中 20 筆 .tw 詐騙（多為精品仿冒）。2026-11-01 本人決定移除（版本 2026.11.01-2）
 - 連網才能取得的資訊（網頁內容、網域年齡、DNS、排名）
 
 修改特徵時必須調整 FEATURE_VERSION，模型版本會記錄它。
@@ -24,7 +26,7 @@ from app.config_loader import load_rules
 from app.services import brand_match
 from app.services.normalizer import InvalidURL, NormalizedURL, is_platform, normalize
 
-FEATURE_VERSION = "2026.11.01-1"
+FEATURE_VERSION = "2026.11.01-3"  # -3：品牌近似加入官方網域名稱與 5 字整詞比對
 
 _VOWELS = set("aeiou")
 _TLD_WORDS = {"com", "net", "org", "gov", "edu"}
@@ -38,7 +40,7 @@ HOST_FEATURES = [
     "host_length", "sld_length", "subdomain_count", "host_dot_count", "host_hyphen_count",
     "host_digit_ratio", "sld_entropy", "sld_vowel_ratio", "sld_has_digit",
     "is_ip", "is_punycode", "has_port", "has_userinfo",
-    "tld_suspicious", "tld_is_tw", "is_platform", "is_shortener",
+    "tld_suspicious", "is_platform", "is_shortener",
     "host_has_tw_token", "tld_word_in_host", "host_keyword_count",
 ]
 PATH_FEATURES = [
@@ -101,7 +103,6 @@ def _host_features(n: NormalizedURL) -> dict:
         "has_port": int(n.port is not None),
         "has_userinfo": int(n.userinfo is not None),
         "tld_suspicious": int(n.suffix.split(".")[-1] in rules["tlds"]),
-        "tld_is_tw": int(n.suffix == "tw" or n.suffix.endswith(".tw")),
         "is_platform": int(is_platform(n.registered_domain)),
         "is_shortener": int(n.registered_domain in rules["shorteners"] or n.host in rules["shorteners"]),
         "host_has_tw_token": int("tw" in words),

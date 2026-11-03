@@ -46,14 +46,14 @@ def test_feature_order_and_count():
 def test_host_features_on_shopee_variant():
     x = f("http://tw06.shopeelem.xyz/")                               # 327
     assert x["subdomain_count"] == 1
-    assert x["tld_suspicious"] == 1 and x["tld_is_tw"] == 0
+    assert x["tld_suspicious"] == 1 and "tld_is_tw" not in x
     assert x["host_has_tw_token"] == 1                                # tw06 → tw
     assert x["brand_contains"] == 1 and x["brand_distance"] == 0
 
 
 def test_tw_tld_and_official_brand():
     x = f("https://shopee.tw/")
-    assert x["tld_is_tw"] == 1 and x["tld_suspicious"] == 0
+    assert x["tld_suspicious"] == 0
     assert x["brand_contains"] == 0 and x["brand_similar"] == 0 and x["brand_distance"] == 5
 
 

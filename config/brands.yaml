@@ -6,7 +6,7 @@
 #         只保留註冊網域，CDN 主機（full:）與非台灣相關網域不收。未註明者為 AI 依常識整理。
 # related_domains：同集團但不同公司的網域（例如國泰人壽之於國泰世華）。列入白名單，但不是該品牌的官方網域。
 # 2026-10-31 以 TWNIC WHOIS 核對註冊者後補入的網域，原始回應見 data/reference/whois/。
-version: "2026.11.01-1"
+version: "2026.11.01-2"
 
 brands:
   - key: momo
@@ -225,6 +225,58 @@ brands:
     domains: [twca.com.tw]
     keywords: [twca]
     source: v2fly
+    verified: false
+  # 國際品牌（2026-11-01 加入）：政府資料中被冒用的精品與運動品牌，多以 .com.tw／.tw 網域仿冒。
+  # diptyque、byredo、maison margiela、loewe 的冒用案例，政府資料記載的對象都是「客林國際」（台灣代理商）。
+  # 官方網域皆出現在 Tranco 746VX（排名見各項 note），品牌歸屬為 AI 依常識整理，待本人核對。
+  - key: diptyque
+    name: diptyque
+    aliases: [diptyque]
+    domains: [diptyqueparis.com]
+    keywords: [diptyque]
+    source: tranco
+    verified: false
+  - key: byredo
+    name: BYREDO
+    aliases: [byredo]
+    domains: [byredo.com]
+    keywords: [byredo]
+    source: tranco
+    verified: false
+  - key: margiela
+    name: Maison Margiela
+    aliases: [margiela]
+    domains: [maisonmargiela.com]
+    keywords: [margiela]
+    source: tranco
+    verified: false
+  - key: loewe
+    name: LOEWE
+    aliases: [loewe]
+    domains: [loewe.com]
+    keywords: [loewe]
+    source: tranco
+    verified: false
+  - key: hoka
+    name: HOKA
+    aliases: [hoka]
+    domains: [hoka.com]
+    keywords: [hoka]
+    source: tranco
+    verified: false
+  - key: salomon
+    name: Salomon
+    aliases: [salomon]
+    domains: [salomon.com]
+    keywords: [salomon]
+    source: tranco
+    verified: false
+  - key: thombrowne
+    name: Thom Browne
+    aliases: [thom browne]
+    domains: [thombrowne.com]
+    keywords: [thombrowne, thom-browne]
+    source: tranco
     verified: false
   # 以下品牌在政府資料中出現，但官方網域尚未確認，留空待本人查證後補上
   - key: leshin

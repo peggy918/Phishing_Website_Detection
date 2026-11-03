@@ -28,6 +28,14 @@ def m(url):
     ("https://rakutsenaffilike.com/", "rakuten", "similar"),
     ("http://telegrm.net/", "telegram", "similar"),                # 1146 一帶
     ("http://mlcr0sof7-off1c017.typeform.com/", "microsoft", "similar"),  # Kaggle 釣魚
+    # 第二版：官方網域名稱當近似候選、5 字整詞比對（依 val_d 調整）
+    ("https://momsohop.com.tw/", "momo", "similar"),              # momoshop 相鄰互換
+    ("https://ecpya.com.tw/", "ecpay", "similar"),                 # 5 字整詞
+    ("https://fcclub.com.tw/", "kfc", "similar"),                  # cl→d 不可破壞 club
+    ("https://kfcc1ub.com.tw/", "kfc", "similar"),                 # 同形字 1→l 後才出現 cl
+    # 國際精品（政府資料 .tw 仿冒）
+    ("https://www.diptyqueshop.com.tw/", "diptyque", "contains"),
+    ("https://www.hokashop.com.tw/", "hoka", "contains"),
 ])
 def test_detected(url, brand, kind):
     r = m(url)
@@ -43,6 +51,9 @@ def test_detected(url, brand, kind):
     "https://ntu.edu.tw/",
     "http://192.168.0.1/login",
     "https://abc.hinet.net/",          # 平台本身名稱不算品牌
+    "https://hokkaido.jp/",            # 4 字的 hoka 只看開頭
+    "https://hookah.com/",
+    "https://lin.me/",                 # 4 字品牌不做近似（已知限制，val_d 中 line 變形抓不到）
 ])
 def test_not_detected(url):
     r = m(url)
