@@ -1,0 +1,13 @@
+{# 內嵌圖示：CSP 不允許外部資源。 #}
+{% macro icon(name) %}
+<svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+  {%- if name == 'shield' %}<path d="M12 3l7 3v5c0 4.6-2.9 8-7 10-4.1-2-7-5.4-7-10V6z"/><path d="M9 12l2 2 4-4"/>
+  {%- elif name == 'bank' %}<path d="M3 10l9-6 9 6z"/><path d="M6 10v8M10 10v8M14 10v8M18 10v8M3 20h18"/>
+  {%- elif name == 'badge' %}<circle cx="12" cy="12" r="9"/><path d="M8.5 12.2l2.4 2.4 4.6-5"/>
+  {%- elif name == 'chip' %}<rect x="7" y="7" width="10" height="10" rx="2"/><path d="M10 3v4M14 3v4M10 17v4M14 17v4M3 10h4M3 14h4M17 10h4M17 14h4"/>
+  {%- elif name == 'high' %}<path d="M12 4l9 16H3z"/><path d="M12 10v4M12 17h.01"/>
+  {%- elif name == 'medium' %}<circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/>
+  {%- elif name == 'low' %}<circle cx="12" cy="12" r="9"/><path d="M8.5 12.2l2.4 2.4 4.6-5"/>
+  {%- endif %}
+</svg>
+{% endmacro %}

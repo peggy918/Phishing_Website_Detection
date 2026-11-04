@@ -169,14 +169,14 @@ def normalize(raw: str) -> NormalizedURL:
     netloc = parts.netloc
     # 主機名不可含空白；路徑與參數中的空白（資料中 5 筆）比照瀏覽器編碼為 %20
     if any(c.isspace() for c in netloc):
-        raise InvalidURL("主機名含有空白")
+        raise InvalidURL("這看起來不是有效的網址，網域中間不能有空白")
     userinfo = None
     if "@" in netloc:
         userinfo, netloc = netloc.rsplit("@", 1)
     host, _, port_text = netloc.partition(":") if not netloc.startswith("[") else (netloc, "", "")
     host = _to_ascii_host(host.strip(".").lower()).removeprefix("www.")
     if not host or "." not in host and not host.startswith("["):
-        raise InvalidURL("找不到有效的主機名")
+        raise InvalidURL("這看起來不是有效的網址，請確認後再試一次")
     port = int(port_text) if port_text.isdigit() else None
     if port == _DEFAULT_PORTS.get(scheme):
         port = None

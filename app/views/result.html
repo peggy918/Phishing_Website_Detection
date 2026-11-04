@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% import "_icons.html" as icons %}
+{% block title %}檢查結果｜一網打詐{% endblock %}
+{% block content %}
+{% set labels = {'high': '高風險', 'medium': '中風險', 'low': '未發現明顯風險跡象'} %}
+{% set advice = {
+  'high': '請不要點開，也不要輸入帳號、密碼或信用卡資料。',
+  'medium': '這個網址有可疑跡象。請改從官方網站或 App 進入，不要直接點連結。',
+  'low': '這不代表網站一定沒問題。輸入個資或付款前，仍請確認是官方管道。'
+} %}
+{% set level = result.risk_level %}
+{% if result.decided_by == 'blacklist' %}{% set basis = '政府通報清單' %}
+{% elif result.decided_by == 'whitelist' %}{% set basis = '品牌官方網域清單' %}
+{% elif result.brand_rule_applied %}{% set basis = '機器學習模型＋品牌規則' %}
+{% else %}{% set basis = '機器學習模型' %}{% endif %}
+
+<section class="verdict {{ level }}">
+  <div class="verdict-icon tone-{{ level }}">{{ icons.icon(level) }}</div>
+  <h1 class="tone-{{ level }}">{{ labels[level] }}</h1>
+  <p>{{ advice[level] }}</p>
+  <ul class="meter" aria-label="風險等級：{{ labels[level] }}">
+    {% for key, text in [('low', '低'), ('medium', '中'), ('high', '高')] %}
+      <li class="{% if key == level %}on tone-{{ key }}{% endif %}">{{ text }}</li>
+    {% endfor %}
+  </ul>
+</section>
+
+<section class="band band-alt band-tight">
+  <div class="wrap-narrow stack">
+    <div class="tile">
+      <p class="label">檢查的網址（去連結顯示，查詢參數不會存檔）</p>
+      <p class="defanged">{{ result.storage_url | defang }}</p>
+    </div>
+    <div class="tile">
+      {% if reasons %}
+        <h2>判斷原因</h2>
+        <ul class="reasons">
+          {% for reason in reasons %}<li>{{ reason }}</li>{% endfor %}
+        </ul>
+      {% endif %}
+      <p class="label{% if reasons %} basis{% endif %}">判定依據：{{ basis }}</p>
+    </div>
+    <p class="center"><a class="pill" href="{{ url_for('scan.index') }}">再檢查一個網址</a></p>
+  </div>
+</section>
+{% endblock %}

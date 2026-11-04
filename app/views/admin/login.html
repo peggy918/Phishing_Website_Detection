@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}管理者登入｜一網打詐{% endblock %}
+{% block content %}
+<section class="band band-alt">
+  <div class="wrap-narrow">
+    <h1 class="page-title center">管理者登入</h1>
+    <div class="tile basis">
+      <form method="post" class="form">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <label for="username">帳號</label>
+        <input id="username" name="username" type="text" autocomplete="username" required>
+        <label for="password">密碼</label>
+        <input id="password" name="password" type="password" autocomplete="current-password" required>
+        <button type="submit" class="pill">登入</button>
+      </form>
+    </div>
+  </div>
+</section>
+{% endblock %}

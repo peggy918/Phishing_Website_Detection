@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% block title %}管理｜一網打詐{% endblock %}
+{% block bar_end %}
+<form class="bar-end" method="post" action="{{ url_for('admin.logout') }}">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  <button type="submit">登出</button>
+</form>
+{% endblock %}
+{% block content %}
+{% macro stat(label, value, tone='') %}
+  <div><dt>{{ label }}</dt><dd{% if tone %} class="tone-{{ tone }}"{% endif %}>{{ '{:,}'.format(value) }}</dd></div>
+{% endmacro %}
+<section class="band band-alt band-tight">
+  <div class="wrap">
+    <h1 class="page-title">管理</h1>
+
+    <div class="admin-section">
+      <h2>統計</h2>
+      <p class="group-label">檢查結果</p>
+      <dl class="stats stats-5">
+        {{ stat('檢查次數', scan_total) }}
+        {{ stat('高風險', levels.get('high', 0), 'high') }}
+        {{ stat('中風險', levels.get('medium', 0), 'medium') }}
+        {{ stat('未發現明顯風險', levels.get('low', 0), 'low') }}
+        {{ stat('無效輸入', invalid_total) }}
+      </dl>
+      <p class="group-label">判定來源</p>
+      <dl class="stats stats-3">
+        {{ stat('黑名單命中', deciders.get('blacklist', 0)) }}
+        {{ stat('白名單命中', deciders.get('whitelist', 0)) }}
+        {{ stat('模型判定', deciders.get('model', 0)) }}
+      </dl>
+      <p class="group-label">資料庫內容</p>
+      <dl class="stats stats-2">
+        {{ stat('黑名單筆數', blacklist_total) }}
+        {{ stat('白名單網域', whitelist_total) }}
+      </dl>
+    </div>
+
+    <div class="admin-section">
+      <h2>匯入政府 XML</h2>
+      <form method="post" action="{{ url_for('admin.import_xml') }}" enctype="multipart/form-data" class="tile import">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <div class="import-text">
+          <label class="import-title" for="file">通報 TWNIC 詐騙網址彙整表</label>
+          <p class="label">XML 格式，5 MB 以內。同一份檔案不會重複匯入。</p>
+        </div>
+        <input id="file" name="file" type="file" accept=".xml" required>
+        <button type="submit" class="pill pill-sm">匯入</button>
+      </form>
+    </div>
+
+    <div class="admin-section">
+      <h2>匯入紀錄</h2>
+      <div class="tile table-tile">
+        {% if batches %}
+        <table>
+          <thead><tr><th scope="col">檔名</th><th scope="col">時間（UTC）</th><th scope="col" class="num">筆數</th><th scope="col" class="num">略過</th></tr></thead>
+          <tbody>
+            {% for b in batches %}
+            <tr>
+              <td>{{ b.filename }}</td>
+              <td>{{ b.imported_at.strftime('%Y-%m-%d %H:%M') }}</td>
+              <td class="num">{{ '{:,}'.format(b.record_count) }}</td>
+              <td class="num">{{ '{:,}'.format(b.skipped_count) }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        {% else %}
+        <p class="empty">尚未匯入</p>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="admin-section">
+      <h2>模型版本</h2>
+      {% for m in models %}
+      <div class="tile model{% if not m.is_active %} off{% endif %}">
+        <div class="model-head">
+          <span class="model-name">{{ m.version }}</span>
+          {% if m.is_active %}
+            <span class="badge">啟用中</span>
+          {% else %}
+            <form method="post" action="{{ url_for('admin.activate', model_id=m.id) }}">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+              <button type="submit" class="pill pill-sm pill-line">啟用這個版本</button>
+            </form>
+          {% endif %}
+        </div>
+        <dl class="model-fields">
+          <div><dt>特徵版本</dt><dd class="mono">{{ m.feature_version }}</dd></div>
+          <div><dt>中風險門檻</dt><dd{% if m.is_active %} class="tone-medium"{% endif %}>{{ '%.3f' % m.threshold_medium }}</dd></div>
+          <div><dt>高風險門檻</dt><dd{% if m.is_active %} class="tone-high"{% endif %}>{{ '%.3f' % m.threshold_high }}</dd></div>
+        </dl>
+      </div>
+      {% else %}
+      <div class="tile"><p class="empty">尚未註冊模型</p></div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

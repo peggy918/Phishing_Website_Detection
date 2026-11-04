@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% import "_icons.html" as icons %}
+{% block content %}
+<section class="hero">
+  <h1>先查，再點。</h1>
+  <p class="hero-sub">點之前，先查看看有哪些可疑跡象。</p>
+  <form method="post" action="{{ url_for('scan.scan') }}" class="scan">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <div class="scan-box">
+      <label class="sr-only" for="url">要檢查的網址</label>
+      <input id="url" name="url" type="text" inputmode="url" autocomplete="off" autocapitalize="off"
+             spellcheck="false" maxlength="4096" required placeholder="貼上簡訊或 LINE 裡的網址"
+             value="{{ value or '' }}"{% if error %} aria-invalid="true" aria-describedby="url-error"{% endif %}>
+      <button type="submit" class="pill">檢查</button>
+    </div>
+    {% if error %}<p class="scan-error" id="url-error" role="alert">{{ error }}</p>{% endif %}
+  </form>
+</section>
+<section class="band band-alt">
+  <div class="wrap">
+    <h2 class="section-title">三道檢查，一個答案。</h2>
+    <div class="tiles">
+      <div class="tile">
+        <div class="tile-icon">{{ icons.icon('bank') }}</div>
+        <h3>政府通報清單</h3>
+        <p class="tile-text">比對已通報的詐騙網址。</p>
+      </div>
+      <div class="tile">
+        <div class="tile-icon">{{ icons.icon('badge') }}</div>
+        <h3>品牌官方網域</h3>
+        <p class="tile-text">分辨官方網站與仿冒網址。</p>
+      </div>
+      <div class="tile">
+        <div class="tile-icon">{{ icons.icon('chip') }}</div>
+        <h3>機器學習模型</h3>
+        <p class="tile-text">偵測尚未被通報的新手法。</p>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

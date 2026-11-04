@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}{{ title }}｜一網打詐{% endblock %}
+{% block content %}
+<section class="band center">
+  <h1 class="page-title center">{{ title }}</h1>
+  <p class="lead">{{ message }}</p>
+  <p class="basis"><a class="pill" href="{{ url_for('scan.index') }}">回到首頁</a></p>
+</section>
+{% endblock %}

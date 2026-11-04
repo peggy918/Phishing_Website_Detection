@@ -112,11 +112,11 @@
 |---|---|
 | ImportBatch | 檔名、匯入時間、筆數、檔案雜湊 |
 | Brand | 品牌名稱、別名 |
-| BrandDomain | 屬於某個 Brand；官方網域 |
+| BrandDomain | 屬於某個 Brand；網域、關係（官方／同集團） |
 | BlacklistEntry | 屬於某個 ImportBatch；可關聯 Brand；原始編號、原始網址、正規化網址、主機名、註冊網域、比對層級、創建／通報／停止解析日期、待確認標記；(批次, 原始編號) 唯一 |
-| Whitelist | 網域、備註 |
+| Whitelist | 網域、屬於某個 Brand、判斷、依據、確認人、備註（只收有歸屬佐證者，排除使用者內容與短網址服務） |
 | ModelVersion | 演算法、特徵版本、資料雜湊、指標、門檻、是否啟用 |
-| ScanRequest | 輸入類型、時間、狀態、規則版本 |
+| ScanRequest | 公開代碼（結果頁用，不可循序猜測）、輸入類型、時間、狀態、規則版本 |
 | ScanResult | 屬於某個 ScanRequest；去除參數的網址、命中的黑名單、疑似冒用品牌、模型版本、機率、風險等級、原因 |
 | AdminUser | 帳號、密碼雜湊 |
 

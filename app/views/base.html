@@ -1,0 +1,32 @@
+{% import "_icons.html" as icons %}<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <meta name="color-scheme" content="light dark">
+  <title>{% block title %}一網打詐{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header class="bar">
+    <div class="bar-inner">
+      <a class="brand" href="{{ url_for('scan.index') }}">{{ icons.icon('shield') }}<span>一網打詐 <span class="brand-en">NetCatch</span></span></a>
+      {% block bar_end %}{% endblock %}
+    </div>
+  </header>
+  <main>
+    {% for category, message in get_flashed_messages(with_categories=true) %}
+      <p class="flash {{ category }}" role="status">{{ message }}</p>
+    {% endfor %}
+    {% block content %}{% endblock %}
+  </main>
+  <footer class="foot">
+    <div class="foot-inner">
+      <p class="foot-brand">一網打詐 NetCatch</p>
+      <p>只分析網址文字，不會連線到該網址。若已匯款或提供個資，請撥打 <strong>165</strong> 反詐騙諮詢專線。</p>
+      <p>學生專題作品，非政府官方服務。</p>
+    </div>
+  </footer>
+</body>
+</html>

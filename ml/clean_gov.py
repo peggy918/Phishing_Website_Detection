@@ -8,7 +8,6 @@
 """
 import json
 import sys
-import xml.etree.ElementTree as ET
 from datetime import datetime
 from pathlib import Path
 from urllib.parse import parse_qsl, urlsplit
@@ -16,27 +15,15 @@ from urllib.parse import parse_qsl, urlsplit
 import pandas as pd
 
 from app.config_loader import load_rules, match_brand
+from app.services.gov_import import parse_gov_xml
 from app.services.normalizer import ensure_scheme, is_platform, match_key, registered_domain, split_host, strip_junk
 
 ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_XML = ROOT / "data" / "raw" / "通報TWNIC詐騙網址彙整表_20261008.xml"
 OUT_DIR = ROOT / "data" / "processed"
 
-FIELDS = {
-    "編號": "record_id",
-    "一頁式數位經濟詐騙網站": "brand_text",
-    "偽冒網址": "raw_url",
-    "網域名稱": "domain_field",
-    "詐騙網站創建日期": "created_at",
-    "接獲通報日期": "reported_at",
-    "停止解析日期": "stopped_at",
-}
-
-
 def parse_xml(path: Path) -> pd.DataFrame:
-    root = ET.parse(path).getroot()
-    rows = [{FIELDS[c.tag]: (c.text or "").strip() for c in rec} for rec in root]
-    df = pd.DataFrame(rows)
+    df = pd.DataFrame(parse_gov_xml(Path(path).read_bytes()))
     df["record_id"] = df["record_id"].astype(int)
     df["created_at"] = pd.to_datetime(df["created_at"], format="%Y-%m-%dT%H:%M:%S")
     df["reported_at"] = pd.to_datetime(df["reported_at"], format="%Y%m%d")

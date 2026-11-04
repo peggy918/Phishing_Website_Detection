@@ -6,13 +6,16 @@
 #         只保留註冊網域，CDN 主機（full:）與非台灣相關網域不收。未註明者為 AI 依常識整理。
 # related_domains：同集團但不同公司的網域（例如國泰人壽之於國泰世華）。列入白名單，但不是該品牌的官方網域。
 # 2026-10-31 以 TWNIC WHOIS 核對註冊者後補入的網域，原始回應見 data/reference/whois/。
-version: "2026.11.01-2"
+# no_whitelist：官方網域，但任何人都能放內容或做短網址（OneDrive、Facebook、LINE 邀請連結…）。
+#   仍算官方、不觸發冒用規則，但不進白名單，交給模型判斷（2026-11-03 本人決定）。
+version: "2026.11.03-2"
 
 brands:
   - key: momo
     name: momo購物網
     aliases: [momo, mom購物, 富邦媒體, 富邦購物, 富邦]
     domains: [momoshop.com.tw, momo.dm, momomall.com.tw, momo5188.com, momo.com.tw]
+    no_whitelist: [momo.dm]
     keywords: [momo]
     source: v2fly
     verified: false
@@ -27,6 +30,7 @@ brands:
     name: 蝦皮購物
     aliases: [蝦皮, shopee]
     domains: [shopee.tw, shopee.com, shp.ee, shopeemobile.com, shopeepay.tw]
+    no_whitelist: [shp.ee]
     keywords: [shopee]  # 不放 shoppe：會命中 shopping、shoppers，由近似比對處理
     source: v2fly
     verified: false
@@ -73,6 +77,7 @@ brands:
     name: LINE
     aliases: [line]
     domains: [line.me, lin.ee, line-apps.com, line-scdn.net, line-cdn.net, line.biz, linecorp.com, linetv.tw, linemyshop.com]
+    no_whitelist: [line.me, lin.ee]
     related_domains: [linebank.com.tw]
     keywords: [line]
     source: v2fly
@@ -120,15 +125,17 @@ brands:
     keywords: [signal]
     verified: false
   - key: microsoft
-    name: Microsoft Teams
+    name: Microsoft
     aliases: [teams, microsoft]
     domains: [microsoft.com, live.com]
+    no_whitelist: [live.com]
     keywords: [microsoft, teams]
     verified: false
   - key: meta
     name: Meta／Facebook
     aliases: [meta, facebook]
     domains: [meta.com, facebook.com, fb.com, instagram.com]
+    no_whitelist: [facebook.com, fb.com, instagram.com]
     keywords: [facebook, meta, instagram]
     verified: false
   - key: friday
@@ -147,6 +154,7 @@ brands:
     name: Telegram
     aliases: [telegram]
     domains: [telegram.org, t.me]
+    no_whitelist: [t.me]
     keywords: [telegram]
     verified: false
   - key: foodpanda
@@ -167,6 +175,7 @@ brands:
     name: Dcard
     aliases: [dcard]
     domains: [dcard.tw, dcard.cc, dcard.link]
+    no_whitelist: [dcard.link]
     keywords: [dcard]
     source: v2fly
     verified: false
