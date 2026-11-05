@@ -38,4 +38,5 @@ def _odbc_query() -> dict:
 
 
 def make_engine(url: str | URL | None = None) -> Engine:
-    return create_engine(url or app_database_url(), pool_pre_ping=True)
+    # hide_parameters：資料庫錯誤訊息不帶查詢參數，避免網址內容進到紀錄
+    return create_engine(url or app_database_url(), pool_pre_ping=True, hide_parameters=True)

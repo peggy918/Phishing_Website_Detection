@@ -3,6 +3,9 @@
 模型與特徵版本不一致時拒絕載入：同名特徵的算法可能已改變，預測會失真且不易察覺。
 """
 import json
+import logging
+import threading
+import time
 from dataclasses import dataclass
 from functools import lru_cache
 from pathlib import Path
@@ -12,9 +15,10 @@ import pandas as pd
 from sqlalchemy import select, update
 from sqlalchemy.orm import Session
 
+from app.logging import log_event
 from app.models import ModelVersion
 from app.services.features import FEATURE_NAMES, FEATURE_VERSION, extract
-from app.services.normalizer import NormalizedURL
+from app.services.normalizer import NormalizedURL, normalize
 
 ROOT = Path(__file__).resolve().parent.parent.parent
 
@@ -51,6 +55,26 @@ def active_model(session: Session) -> ActiveModel:
         raise ModelUnavailable(f"模型特徵版本 {row.feature_version} 與程式 {FEATURE_VERSION} 不一致，需重新訓練")
     return ActiveModel(row.id, row.version, {"medium": row.threshold_medium, "high": row.threshold_high},
                        _load_artifact(row.artifact_path))
+
+
+def preload(session_factory) -> bool:
+    """先載入啟用中的模型並預測一次，讓第一位使用者不用等。失敗只記錄：黑名單與白名單仍可運作。"""
+    start = time.perf_counter()
+    try:
+        with session_factory() as session:
+            model = active_model(session)
+            model.probability(normalize("https://example.com/"))
+    except Exception as e:
+        log_event("model_preload_failed", level=logging.WARNING, reason=str(e))
+        return False
+    log_event("model_preloaded", version=model.version, duration_ms=round((time.perf_counter() - start) * 1000, 1))
+    return True
+
+
+def preload_in_background(session_factory) -> threading.Thread:
+    thread = threading.Thread(target=preload, args=(session_factory,), name="model-preload", daemon=True)
+    thread.start()
+    return thread
 
 
 def register_model(session: Session, model_dir: Path, activate: bool = True) -> ModelVersion:

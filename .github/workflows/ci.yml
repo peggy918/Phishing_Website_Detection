@@ -1,0 +1,30 @@
+# 在全新環境安裝並跑完整測試。測試用暫存 SQLite 與假模型，不需要 SQL Server、原始資料或模型檔。
+name: tests
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: windows-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+          cache: pip
+      - name: Install dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Install browser for E2E tests
+        run: python -m playwright install chromium
+      - name: Run tests
+        run: python -m pytest --cov=app --cov=ml --cov-report=term
+      - name: Upload screenshots on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-output
+          path: test-results/
+          if-no-files-found: ignore

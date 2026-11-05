@@ -4,6 +4,7 @@
 <section class="band center">
   <h1 class="page-title center">{{ title }}</h1>
   <p class="lead">{{ message }}</p>
+  {% if request_id %}<p class="label basis">需要回報時，請提供追蹤碼：{{ request_id }}</p>{% endif %}
   <p class="basis"><a class="pill" href="{{ url_for('scan.index') }}">回到首頁</a></p>
 </section>
 {% endblock %}

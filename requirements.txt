@@ -15,3 +15,5 @@ joblib==1.6.0
 defusedxml==0.7.1
 pytest==9.2.0
 pytest-cov==7.1.0
+playwright==1.64.1
+pytest-playwright==0.10.0

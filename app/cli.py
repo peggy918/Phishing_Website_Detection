@@ -9,7 +9,7 @@ from werkzeug.security import generate_password_hash
 from app.models import AdminUser
 from app.services.gov_import import ImportFailed, import_gov_xml
 from app.services.predictor import register_model
-from app.services.reference_data import seed_reference_data
+from app.services.reference_data import import_whois_raw, seed_reference_data
 
 
 def register_cli(app) -> None:
@@ -18,9 +18,17 @@ def register_cli(app) -> None:
 
     @app.cli.command("seed-reference")
     def seed_reference():
-        """依 brands.yaml 與 domain_reviews.csv 重建品牌與白名單。"""
+        """匯入品牌、抽查紀錄與 WHOIS 摘要，並由資料庫的紀錄重建白名單。"""
         with session() as db:
             click.echo(seed_reference_data(db))
+            db.commit()
+
+    @app.cli.command("import-whois")
+    @click.argument("folder", type=click.Path(exists=True, file_okay=False, path_type=Path))
+    def import_whois(folder):
+        """把本機的完整 WHOIS 回應（<網域>.txt）存入資料庫。這些檔案含第三方個資，不進 repo。"""
+        with session() as db:
+            click.echo(f"已匯入 {import_whois_raw(db, folder)} 筆")
             db.commit()
 
     @app.cli.command("import-gov")

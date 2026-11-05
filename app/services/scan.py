@@ -6,6 +6,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.config_loader import load_rules
+from app.logging import stage
 from app.models import Brand, ScanRequest, ScanResult, Whitelist
 from app.services import blacklist, brand_match, predictor, reasons, risk
 from app.services.features import extract
@@ -15,8 +16,9 @@ from app.services.normalizer import NormalizedURL, is_platform, normalize
 def _save(session: Session, n: NormalizedURL, **fields) -> ScanRequest:
     request = ScanRequest(public_id=str(uuid.uuid4()), status="done", rules_version=load_rules()["version"])
     request.result = ScanResult(storage_url=n.storage_url, host=n.host, **fields)
-    session.add(request)
-    session.flush()
+    with stage("save"):
+        session.add(request)
+        session.flush()
     return request
 
 
@@ -26,25 +28,29 @@ def _brand_id(session: Session, key: str | None) -> int | None:
 
 def scan_url(session: Session, raw: str) -> ScanRequest:
     """無效網址拋 InvalidURL；沒有可用模型時拋 ModelUnavailable（黑名單與白名單仍可判定）。呼叫端負責 commit。"""
-    n = normalize(raw)
+    with stage("normalize"):
+        n = normalize(raw)
 
-    entry = blacklist.find(session, n)
+    with stage("blacklist"):
+        entry = blacklist.find(session, n)
     if entry:
         return _save(session, n, decided_by="blacklist", blacklist_entry_id=entry.id, risk_level=risk.HIGH,
                      suspected_brand_id=entry.brand_id, reasons=json.dumps(_blacklist_reasons(entry), ensure_ascii=False))
 
     # 平台型網域的註冊網域是平台本身，不能因此放行底下的所有子網域
-    white = None if is_platform(n.registered_domain) else session.scalar(
-        select(Whitelist).where(Whitelist.domain == n.registered_domain))
+    with stage("whitelist"):
+        white = None if is_platform(n.registered_domain) else session.scalar(
+            select(Whitelist).where(Whitelist.domain == n.registered_domain))
     if white:
         relation = "官方" if white.decision == "official" else "同集團"
         why = [f"網域列於{white.brand.name if white.brand else ''}的{relation}網域清單"]
         return _save(session, n, decided_by="whitelist", risk_level=risk.LOW, reasons=json.dumps(why, ensure_ascii=False))
 
-    model = predictor.active_model(session)
-    match = brand_match.match(n)
-    probability = model.probability(n)
-    assessment = risk.assess(probability, match.kind, model.thresholds)
+    with stage("model"):
+        model = predictor.active_model(session)
+        match = brand_match.match(n)
+        probability = model.probability(n)
+        assessment = risk.assess(probability, match.kind, model.thresholds)
     why = reasons.model_reasons(n, extract(n), match, assessment.level)
     suspected = match.brand_key if match.kind in risk.IMPERSONATION_KINDS else None
     return _save(session, n, decided_by="model", model_version_id=model.id, probability=probability,

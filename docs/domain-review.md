@@ -1,7 +1,7 @@
 # 網域抽查紀錄
 
 > 由 `python -m ml.domain_reviews` 依 `data/reference/domain_reviews.csv` 產生，請勿手動修改。
-> WHOIS 原始回應：`data/reference/whois/`。
+> WHOIS 完整回應含第三方個資，只存本機資料庫；此處只列公司名稱，個人已遮蔽。
 
 圖例：✓ 官方（列入 brands.yaml domains）　△ 同集團或合資（列入 related_domains）　○ 正常網站但非該品牌（保留為台灣正常網域，標 brand_lookalike）　✗ 移除（從 brands.yaml 移除）
 
@@ -46,7 +46,7 @@
 | foodpanda.tw | foodpanda | ✓ 官方 | 本人官網確認 |  | 本人 | 2026-10-31 |  |
 | cavesbooks.com.tw | books | ○ 非該品牌 | 本人官網確認 |  | 本人 | 2026-10-31 | 敦煌書局（本人確認為正常網站） |
 | linebank.com.tw | line | △ 同集團 | TWNIC WHOIS | LY Corporation | Claude | 2026-10-31 | WHOIS「LY Corporation」（LINE 母公司） |
-| yabeline.tw | line | ○ 非該品牌 | TWNIC WHOIS | (個人，已遮蔽) | Claude | 2026-10-31 | WHOIS 註冊者為個人（(個人，已遮蔽)） |
+| yabeline.tw | line | ○ 非該品牌 | TWNIC WHOIS | (個人，已遮蔽) | Claude | 2026-10-31 | WHOIS 註冊者為個人 |
 | esunsec.com.tw | esun | △ 同集團 | TWNIC WHOIS | 玉山綜合證券股份有限公司 | Claude | 2026-10-31 | WHOIS「玉山綜合證券股份有限公司」 |
 | pchome.tw | pchome | ✓ 官方 | 本人官網確認 |  | 本人 | 2026-10-31 |  |
 | shopeepay.tw | shopee | ✓ 官方 | TWNIC WHOIS | ShopeePay Private Limited | Claude | 2026-10-31 | WHOIS「ShopeePay Private Limited」（Sea 集團） |

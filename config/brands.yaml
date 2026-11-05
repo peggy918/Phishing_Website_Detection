@@ -5,7 +5,7 @@
 # source：v2fly 代表網域取自 https://github.com/v2fly/domain-list-community/tree/master/data（MIT 授權，2026-10-31 取得），
 #         只保留註冊網域，CDN 主機（full:）與非台灣相關網域不收。未註明者為 AI 依常識整理。
 # related_domains：同集團但不同公司的網域（例如國泰人壽之於國泰世華）。列入白名單，但不是該品牌的官方網域。
-# 2026-10-31 以 TWNIC WHOIS 核對註冊者後補入的網域，原始回應見 data/reference/whois/。
+# 2026-10-31 以 TWNIC WHOIS 核對註冊者後補入的網域，摘要見 data/reference/whois_summary.csv，完整回應只存本機資料庫。
 # no_whitelist：官方網域，但任何人都能放內容或做短網址（OneDrive、Facebook、LINE 邀請連結…）。
 #   仍算官方、不觸發冒用規則，但不進白名單，交給模型判斷（2026-11-03 本人決定）。
 version: "2026.11.03-2"

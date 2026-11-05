@@ -1,10 +1,17 @@
-"""PhishGuard Flask 應用程式。ml/ 腳本也會 import app.*，所以 Flask 相關模組都在 create_app 內才載入。"""
+"""PhishGuard Flask 應用程式。ml/ 腳本也會 import app.*，所以 Flask 相關模組都在 create_app 內才載入。
+
+注意：app/logging 載入後會成為本套件的屬性 logging，所以這裡不可用 import logging 再寫 logging.ERROR。
+"""
 import os
+import time
+import uuid
+from logging import ERROR
+from pathlib import Path
 
 
 def create_app(config: dict | None = None):
     from dotenv import load_dotenv
-    from flask import Flask, g
+    from flask import Flask, g, got_request_exception, request
     from sqlalchemy.orm import sessionmaker
 
     from app.cli import register_cli
@@ -13,6 +20,7 @@ def create_app(config: dict | None = None):
     from app.db import make_engine
     from app.errors import register_error_handlers
     from app.extensions import csrf, limiter
+    from app.logging import begin_request, configure, current_request_id, log_event
     from app.services.normalizer import defang
 
     load_dotenv()
@@ -23,11 +31,13 @@ def create_app(config: dict | None = None):
         SESSION_COOKIE_HTTPONLY=True,
         SESSION_COOKIE_SAMESITE="Lax",
         RATELIMIT_STORAGE_URI="memory://",
+        LOG_PATH=os.environ.get("LOG_PATH", str(Path(__file__).resolve().parent.parent / "logs" / "app.jsonl")),
     )
     app.config.update(config or {})
     if not app.config["SECRET_KEY"] or app.config["SECRET_KEY"] == "change-me":
         raise RuntimeError("請在 .env 設定 FLASK_SECRET_KEY")
 
+    configure(app.config["LOG_PATH"])
     engine = make_engine(app.config.get("DATABASE_URL"))
     app.config["SESSION_FACTORY"] = sessionmaker(engine, expire_on_commit=False)
 
@@ -39,6 +49,18 @@ def create_app(config: dict | None = None):
     register_cli(app)
     app.add_template_filter(defang, "defang")
 
+    @app.before_request
+    def start_request():
+        begin_request(uuid.uuid4().hex)
+        g.request_started = time.perf_counter()
+
+    def log_exception(_sender, exception, **_extra):
+        log_event("unhandled_exception", level=ERROR,
+                  exc_info=(type(exception), exception, exception.__traceback__))
+
+    # weak=False：函式只在這裡被參考，否則訊號連線會被回收
+    got_request_exception.connect(log_exception, app, weak=False)
+
     @app.teardown_appcontext
     def close_session(_exc):
         session = g.pop("db", None)
@@ -47,7 +69,14 @@ def create_app(config: dict | None = None):
             session.close()
 
     @app.after_request
-    def security_headers(response):
+    def finish_request(response):
+        # 只記路由樣板（/result/<public_id>），不記實際路徑：結果頁代碼可看到他人查過的網址
+        rule = request.url_rule.rule if request.url_rule else "(no route)"
+        started = g.get("request_started", time.perf_counter())
+        log_event("request", method=request.method, route=rule, status=response.status_code,
+                  duration_ms=round((time.perf_counter() - started) * 1000, 2))
+        if current_request_id():
+            response.headers["X-Request-ID"] = current_request_id()
         response.headers["Content-Security-Policy"] = (
             "default-src 'self'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'")
         response.headers["X-Content-Type-Options"] = "nosniff"

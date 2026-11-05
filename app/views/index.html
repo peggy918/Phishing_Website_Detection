@@ -4,7 +4,7 @@
 <section class="hero">
   <h1>先查，再點。</h1>
   <p class="hero-sub">點之前，先查看看有哪些可疑跡象。</p>
-  <form method="post" action="{{ url_for('scan.scan') }}" class="scan">
+  <form method="post" action="{{ url_for('scan.scan') }}" class="scan" data-submit-once="檢查中…">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
     <div class="scan-box">
       <label class="sr-only" for="url">要檢查的網址</label>

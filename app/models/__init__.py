@@ -84,6 +84,33 @@ class Whitelist(Base):
     brand: Mapped[Brand | None] = relationship()
 
 
+class DomainReview(Base):
+    """網域抽查紀錄。"""
+    __tablename__ = "domain_review"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    domain: Mapped[str] = mapped_column(String(255), unique=True)
+    brand_key: Mapped[str] = mapped_column(String(50))
+    decision: Mapped[str] = mapped_column(String(20))    # official／related／not_brand／removed
+    evidence: Mapped[str] = mapped_column(String(30))    # manual_website／twnic_whois／unverifiable
+    registrant: Mapped[str] = mapped_column(Unicode(255), default="")
+    reviewer: Mapped[str] = mapped_column(String(20))    # user／claude
+    reviewed_on: Mapped[str] = mapped_column(String(10))
+    note: Mapped[str] = mapped_column(Unicode(500), default="")
+
+
+class WhoisRecord(Base):
+    """WHOIS 查詢紀錄。raw_response 含第三方個資，只存本機資料庫，不進 repo。"""
+    __tablename__ = "whois_record"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    domain: Mapped[str] = mapped_column(String(255), unique=True)
+    registrant: Mapped[str] = mapped_column(Unicode(255), default="")   # 摘要：公司名稱；個人已遮蔽
+    record_created_on: Mapped[str] = mapped_column(String(10), default="")
+    queried_on: Mapped[str] = mapped_column(String(10), default="")
+    raw_response: Mapped[str | None] = mapped_column(UnicodeText)
+
+
 class ModelVersion(Base):
     __tablename__ = "model_version"
 

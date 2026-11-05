@@ -2,6 +2,8 @@
 from flask import render_template
 from flask_wtf.csrf import CSRFError
 
+from app.logging import current_request_id, log_event
+
 MESSAGES = {
     400: ("請求無效", "請回到上一頁重新送出。"),
     404: ("找不到頁面", "這個頁面不存在或已失效。"),
@@ -13,8 +15,10 @@ MESSAGES = {
 
 
 def _page(code: int):
+    if code == 429:
+        log_event("rate_limited")
     title, message = MESSAGES[code]
-    return render_template("error.html", title=title, message=message), code
+    return render_template("error.html", title=title, message=message, request_id=current_request_id()), code
 
 
 def register_error_handlers(app) -> None:

@@ -73,7 +73,7 @@
 - 發現 4：v2fly 沒收的官方網域，例如 momo.com.tw、pchome.tw、shopeepay.tw、linebank.com.tw、foodpanda.tw，列入抽查清單第二節。
 
 ### 網域抽查（2026-10-31，→ p.17 P3 AI 產出核對、p.8–12 G3）
-紀錄：`data/reference/domain_reviews.csv`（正式資料來源）→ `docs/domain-review.md`（由 CSV 產生）；WHOIS 原始回應：`data/reference/whois/`；摘要：`data/reference/whois_summary.csv`。
+紀錄：`data/reference/domain_reviews.csv` → `docs/domain-review.md`（由 CSV 產生）；WHOIS 摘要：`data/reference/whois_summary.csv`；完整回應只存本機資料庫（見文末 2026-11-06）。
 - **第一節（不在 Tranco 的 13 個）：本人上官網逐一確認**。11 個 ✓；dcard.io、linefriends.com.tw 無法連線 → 從 brands.yaml 移除。
 - **第二節（31 個含品牌字的 .tw 網域）**：本人確認 7 個，其餘 24 個由 Claude 以 TWNIC WHOIS（whois.twnic.net.tw:43，`ml/whois_check.py`）查註冊者，並查 9 個已知官方網域的註冊者作為對照：
   - 官方 6 個（momo.com.tw、shopeepay.tw、cathay-cube.com.tw、postmall.com.tw、hinet.tw、hinetcdn.net.tw）→ 加入 domains
@@ -338,3 +338,44 @@
 - 介面參考蘋果官網風格：先提示意圖、本人確認後才實作；第一版示意圖把管理頁簡化過頭，經本人指出後補回全部內容，模型版本改為獨立欄位。風險顏色只用在判定結果與相關統計。
 - 實際在瀏覽器檢查首頁、三種結果、錯誤訊息、登入、管理頁（含切換模型），桌面、手機、淺色、深色都看過，無水平捲動。使用暫存資料庫與真實模型。
 - 查核中修正：說明文字最後一字掉行、短頁面頁尾下方露底、錯誤訊息用語太技術化（「主機名」改成一般用語）。
+
+---
+
+## 階段 4（2026-11-05）紀錄、E2E、重建
+
+**狀態**：程式部分完成，共 347 項測試。還差本人建立 GitHub repo、確認 GitHub Actions 實際通過、在乾淨環境重建。
+
+### 紀錄（→ p.15 G6）
+- `app/logging`：JSON 格式，同一次操作共用 request_id，記錄 normalize、blacklist、whitelist、model、save、commit 各階段耗時。
+- 網址只記主機名與雜湊；無效輸入不記內容；路由記樣板，不記結果頁代碼；管理頁失敗登入不記帳號（使用者可能把密碼打在帳號欄）；被擋的外部存取不記 IP；資料庫錯誤不帶查詢參數。
+- 錯誤頁顯示追蹤碼，對應 request_id。
+- **追查演練**：`docs/results/g6-log-trace.md`。故意移開模型檔，從畫面的追蹤碼查到紀錄原因，放回後確認恢復。報告要寫明這是刻意製造的演練。
+
+### 測試發現的問題（→ p.6–7 G2、p.16 G7）
+1. **錯誤紀錄本身會當掉**：`app/logging` 載入後蓋掉 `app/__init__.py` 的 `import logging`，只有在系統出錯、要寫錯誤紀錄時才發生。由「伺服器錯誤可追查」測試抓到，一般流程測不到。
+2. **重複送出的測試寫了三次才有效**（突變驗證的好例子）。第一版用雙擊，拿掉防護仍通過，因為第一下就換頁；第二版同一瞬間送兩次，仍通過，因為瀏覽器會自動合併；第三版讓回應變慢、隔 100 毫秒再送，拿掉防護時送出 2 次，測試才會失敗。真正的風險情境是伺服器還沒回應時使用者再按一次。
+3. 防重複只在瀏覽器端（`app/static/app.js`）；關閉 JavaScript 或直接送請求仍可重複，只會多一筆紀錄，不影響判定。
+
+### 效能（→ p.13 G4）
+`flask --app wsgi run` 啟動時在背景載入模型。重建環境實測：背景載入約 1.9 秒，之後第一次模型判斷請求 0.04 秒。先前第一次檢查要等 6–25 秒，但兩者環境與快取狀態不同，1.9 秒不代表每次都這麼快。
+
+### 重建預演（→ p.13 G4）
+由 Claude 在全新資料夾照 README 執行：全新虛擬環境安裝、沒有資料時跑測試、下載資料核對雜湊、六個資料與訓練步驟、建表、匯入、註冊模型、啟動網站。
+- 347 項測試在沒有原始資料、模型與 .env 時全過。
+- **可重現**：`dataset.csv` 的 SHA-256 相同，評估報告除訓練時間、預測耗時與產生時間外完全相同，門檻相同。
+- 限制：同一台電腦、資料庫用 SQLite、由 AI 執行。**不能當作 G4 的乾淨環境重建證據**，那要由本人在 Windows Sandbox 或另一台電腦做，SQL Server 也要實際安裝。GitHub Actions 尚未實際跑過。
+
+### 開發工具
+`.mcp.json` 加入 chrome-devtools 與 playwright 兩個 MCP（版本固定、瀏覽器設定檔隔離、關閉 Chrome DevTools 的使用統計與 CrUX 回傳）。只用於開發測試自己的網站；**不可拿來開啟被檢查的可疑網址**。
+
+### AI 產生內容（待本人核對）
+- [ ] `app/logging/`、`wsgi.py`、`app/static/app.js`
+- [ ] `tests/e2e/`、`tests/integration/test_logging.py`
+- [ ] `README.md`、`.github/workflows/ci.yml`、`.mcp.json`
+
+### WHOIS 個資與佐證改以資料庫為準（2026-11-06，本人提出，→ p.14 G5 資料保護、p.10 ERD）
+- **發現**：推上公開 GitHub 前掃描，WHOIS 原始檔含第三方個人姓名、Gmail、電話，也有聯絡人資料，而且已在舊 commit 中。
+- **架構修正（本人指出）**：系統執行時本來就查資料庫，但建立白名單時是看資料夾裡有沒有 WHOIS 檔案，等於佐證依賴檔案。改為：新增 `domain_review`、`whois_record` 資料表，白名單由資料庫紀錄決定。
+- 完整回應只存本機資料庫的 `whois_record.raw_response`，備份在 `data/raw/whois/`（不進 git）。repo 只留遮蔽摘要：不含信箱，個人註冊者顯示 `(個人，已遮蔽)`，用途是讓空資料庫能建立初始資料。
+- 訓練資料仍由檔案產生：資料庫內容會變動，檔案可計算雜湊並重現模型（G4、ModelVersion）。
+- 有測試檢查公開檔案不含信箱與電話；有測試確認刪掉資料庫紀錄後，網域就不能進白名單；重新匯入摘要不會蓋掉本機完整回應。

@@ -6,7 +6,7 @@
 - decision     official（列入 domains）／related（同集團，列入 related_domains）／
                not_brand（正常網站但非該品牌，保留為台灣正常網域並標 brand_lookalike）／removed（從 brands.yaml 移除）
 - evidence     manual_website（本人上官網確認）／twnic_whois（TWNIC WHOIS 註冊者）／unverifiable（無法驗證）
-- registrant   WHOIS 註冊者（evidence＝twnic_whois 時）；原始回應見 data/reference/whois/
+- registrant   WHOIS 註冊者（evidence＝twnic_whois 時）；個人註冊者已遮蔽，完整回應只存本機資料庫
 - reviewer     user（本人）／claude
 - reviewed_at  抽查日期
 - trigger      列入抽查的原因：not_in_tranco／brand_keyword_in_tranco
@@ -53,7 +53,7 @@ def render_markdown(df: pd.DataFrame) -> str:
         "# 網域抽查紀錄",
         "",
         "> 由 `python -m ml.domain_reviews` 依 `data/reference/domain_reviews.csv` 產生，請勿手動修改。",
-        "> WHOIS 原始回應：`data/reference/whois/`。",
+        "> WHOIS 完整回應含第三方個資，只存本機資料庫；此處只列公司名稱，個人已遮蔽。",
         "",
         "圖例：✓ 官方（列入 brands.yaml domains）　△ 同集團或合資（列入 related_domains）　"
         "○ 正常網站但非該品牌（保留為台灣正常網域，標 brand_lookalike）　✗ 移除（從 brands.yaml 移除）",

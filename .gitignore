@@ -18,3 +18,12 @@ models_store/
 
 # 學校評分文件不公開到 GitHub
 docs/rubric/
+
+# 執行紀錄
+logs/
+
+# Playwright 失敗時的截圖
+test-results/
+
+# Playwright MCP 的暫存輸出
+.playwright-mcp/

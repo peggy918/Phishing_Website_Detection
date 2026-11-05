@@ -3,7 +3,8 @@
 僅用於驗證 brands.yaml／抽查清單等「參考資料」，不屬於系統執行流程；
 系統本身仍遵守「不對被檢查的網址做 WHOIS」原則。
 
-原始回應存於 data/reference/whois/<domain>.txt（報告佐證），摘要輸出至 data/reference/whois_summary.csv。
+完整回應含第三方個資，存於 data/raw/whois/<domain>.txt（不進 git），再用 flask import-whois 存入資料庫。
+摘要輸出至 data/reference/whois_summary.csv（公開）：不含信箱；註冊者是個人時要手動改成 (個人，已遮蔽)。
 用法：python -m ml.whois_check domain1 domain2 ...
 """
 import csv
@@ -13,7 +14,7 @@ import time
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-OUT_DIR = ROOT / "data" / "reference" / "whois"
+OUT_DIR = ROOT / "data" / "raw" / "whois"
 SUMMARY = ROOT / "data" / "reference" / "whois_summary.csv"
 SERVER = ("whois.twnic.net.tw", 43)
 
@@ -76,7 +77,7 @@ def main(domains: list[str]) -> None:
                      "queried_at": time.strftime("%Y-%m-%d", time.localtime(p.stat().st_mtime))})
     with open(SUMMARY, "w", newline="", encoding="utf-8-sig") as f:
         w = csv.DictWriter(f, fieldnames=["domain", "found", "registrant_zh", "registrant_en",
-                                          "email_domain", "created", "queried_at"])
+                                          "created", "queried_at"], extrasaction="ignore")
         w.writeheader()
         w.writerows(rows)
     missing = [d for d in domains if not (OUT_DIR / f"{d}.txt").exists()]

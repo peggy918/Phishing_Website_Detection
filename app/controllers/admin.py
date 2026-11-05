@@ -7,6 +7,7 @@ from sqlalchemy import func, select
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from app.extensions import db_session, limiter
+from app.logging import log_event
 from app.models import AdminUser, BlacklistEntry, ImportBatch, ModelVersion, ScanRequest, ScanResult, Whitelist
 from app.services.gov_import import ImportFailed, import_gov_xml
 from app.services.predictor import activate_model
@@ -27,6 +28,8 @@ def is_local_request() -> bool:
 @admin_bp.before_request
 def local_only():
     if not is_local_request():
+        # 不記對方 IP：只需要知道有人嘗試，以及是否來自 Tunnel
+        log_event("admin_blocked", forwarded=any(h in request.headers for h in FORWARD_HEADERS))
         abort(404)   # 不透露管理頁面存在
 
 
@@ -49,7 +52,9 @@ def login():
         if user and ok:
             cookie.clear()
             cookie["admin_id"] = user.id
+            log_event("admin_login", success=True, admin_id=user.id)
             return redirect(url_for("admin.dashboard"))
+        log_event("admin_login", success=False)   # 不記輸入的帳號：使用者可能把密碼打在帳號欄
         flash("帳號或密碼錯誤", "error")
     return render_template("admin/login.html")
 
@@ -91,8 +96,11 @@ def import_xml():
         db.commit()
     except ImportFailed as e:
         db.rollback()
+        log_event("admin_import_failed", admin_id=cookie.get("admin_id"), reason=str(e))
         flash(str(e), "error")
     else:
+        log_event("admin_import", admin_id=cookie.get("admin_id"), imported=summary.imported,
+                  skipped=summary.skipped, needs_review=summary.needs_review)
         flash(f"匯入 {summary.imported} 筆（略過 {summary.skipped} 筆，待確認 {summary.needs_review} 筆）", "ok")
     return redirect(url_for("admin.dashboard"))
 
@@ -105,5 +113,6 @@ def activate(model_id: int):
         abort(404)
     activate_model(db, model_id)
     db.commit()
+    log_event("admin_model_activated", admin_id=cookie.get("admin_id"), model_id=model_id)
     flash("已切換模型版本", "ok")
     return redirect(url_for("admin.dashboard"))

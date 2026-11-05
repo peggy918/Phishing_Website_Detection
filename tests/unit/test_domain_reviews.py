@@ -1,4 +1,5 @@
 """抽查紀錄 domain_reviews.csv 與 brands.yaml 的一致性，以及讀取時的格式驗證。"""
+import pandas as pd
 import pytest
 
 from app.config_loader import load_brands
@@ -32,10 +33,10 @@ def test_rejected_domains_not_in_any_brand(reviews, brands):
     assert rejected & listed == set()
 
 
-def test_whois_rows_have_raw_response(reviews):
+def test_whois_rows_are_in_public_summary(reviews):
+    summary = pd.read_csv(domain_reviews.ROOT / "data" / "reference" / "whois_summary.csv", encoding="utf-8-sig")
     rows = reviews[reviews["evidence"] == "twnic_whois"]
-    missing = [d for d in rows["domain"] if not (domain_reviews.ROOT / "data" / "reference" / "whois" / f"{d}.txt").exists()]
-    assert missing == []
+    assert set(rows["domain"]) <= set(summary.loc[summary["found"], "domain"])
 
 
 def test_invalid_decision_raises(tmp_path):

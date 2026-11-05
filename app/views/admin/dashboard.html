@@ -39,7 +39,7 @@
 
     <div class="admin-section">
       <h2>匯入政府 XML</h2>
-      <form method="post" action="{{ url_for('admin.import_xml') }}" enctype="multipart/form-data" class="tile import">
+      <form method="post" action="{{ url_for('admin.import_xml') }}" enctype="multipart/form-data" class="tile import" data-submit-once="匯入中…">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <div class="import-text">
           <label class="import-title" for="file">通報 TWNIC 詐騙網址彙整表</label>

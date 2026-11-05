@@ -35,7 +35,8 @@ def make_app(tmp_path):
     def build(**config):
         app = create_app({
             "TESTING": True, "SECRET_KEY": "test-secret", "DATABASE_URL": f"sqlite:///{tmp_path / 'test.db'}",
-            "WTF_CSRF_ENABLED": False, "RATELIMIT_ENABLED": False, **config,
+            "WTF_CSRF_ENABLED": False, "RATELIMIT_ENABLED": False,
+            "LOG_PATH": str(tmp_path / "default-app.jsonl"), **config,
         })
         factory = app.config["SESSION_FACTORY"]
         Base.metadata.create_all(factory.kw["bind"])
