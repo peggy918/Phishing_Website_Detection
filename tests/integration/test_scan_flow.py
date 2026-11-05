@@ -6,7 +6,7 @@ import socket
 import pytest
 from sqlalchemy import func, select
 
-from app.models import BlacklistEntry, ScanRequest, ScanResult
+from app.models import BlacklistEntry, ScanRequest, ScanResult, Whitelist
 from app.services.predictor import ModelUnavailable
 from app.services.scan import scan_url
 from tests.integration.conftest import add_model
@@ -67,6 +67,14 @@ def test_whitelist_skips_model(db, url):
 def test_user_content_official_domains_go_to_model_without_impersonation_rule(db, low_model, url):
     r = scan(db, url)
     assert (r.decided_by, r.risk_level, r.brand_rule_applied) == ("model", "low", False)
+
+
+def test_platform_domain_cannot_be_whitelisted(db, low_model):
+    # 突變測試發現：目前白名單沒有平台型網域，這段防護從沒被執行。
+    # 就算有人誤把 github.io 加進白名單，底下所有子網域仍要交給模型判斷。
+    db.add(Whitelist(domain="github.io", decision="official", evidence="manual_website", reviewer="user"))
+    db.flush()
+    assert scan(db, "https://someone-else.github.io/").decided_by == "model"
 
 
 def test_official_without_evidence_goes_to_model(db, low_model):

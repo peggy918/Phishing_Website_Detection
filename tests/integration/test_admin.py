@@ -122,6 +122,15 @@ def test_xml_entity_attacks_are_rejected(attack):
         parse_gov_xml(attack)
 
 
+def test_entities_in_otherwise_valid_records_are_rejected():
+    # 突變測試發現：上面的攻擊字串沒有欄位，換成不安全的解析器也會因為內容無效而被拒絕，測不出解析器。
+    # 這裡的紀錄本身有效，只有用安全的解析器才會因為實體定義被拒絕。
+    xml = ("<?xml version=\"1.0\" encoding=\"UTF-8\"?><!DOCTYPE d [<!ENTITY a \"https://x.top/\">]><dataset><record>"
+           "<編號>1</編號><一頁式數位經濟詐騙網站>t</一頁式數位經濟詐騙網站><偽冒網址>&a;</偽冒網址></record></dataset>").encode("utf-8")
+    with pytest.raises(ImportFailed, match="無法解析"):
+        parse_gov_xml(xml)
+
+
 def test_oversized_upload_is_rejected(make_app):
     app = make_app(MAX_CONTENT_LENGTH=1024)
     client = app.test_client()

@@ -124,6 +124,42 @@ def test_back_button_allows_a_new_scan(page: Page, server):
     assert scan_count(server) == 2
 
 
+# ---- 斷線 ----
+
+def test_connection_lost_before_server_receives_it(page: Page, server):
+    # 送出時斷線：伺服器沒收到，不留紀錄；恢復後重新操作就能完成
+    page.route("**/scan", lambda route: route.abort("connectionfailed"))
+    page.goto(server["url"])
+    page.get_by_label("要檢查的網址").fill("https://shopee.tw/")
+    page.get_by_role("button", name="檢查", exact=True).click()
+    page.wait_for_load_state()
+    assert "/result/" not in page.url and scan_count(server) == 0
+
+    page.unroute("**/scan")
+    check(page, server, "https://shopee.tw/")
+    expect(page.get_by_role("heading", level=1)).to_have_text("未發現明顯風險跡象")
+    assert scan_count(server) == 1
+
+
+def test_response_lost_after_server_saved_it(page: Page, server):
+    # 伺服器已存檔、回應途中斷線：使用者看不到結果，重查會多一筆紀錄，但判定不受影響
+    def drop_response(route):
+        route.fetch()
+        route.abort("connectionreset")
+
+    page.route("**/scan", drop_response)
+    page.goto(server["url"])
+    page.get_by_label("要檢查的網址").fill("http://tw06.shopeelem.xyz/")
+    page.get_by_role("button", name="檢查", exact=True).click()
+    page.wait_for_load_state()
+    assert scan_count(server) == 1
+
+    page.unroute("**/scan")
+    check(page, server, "http://tw06.shopeelem.xyz/")
+    expect(page.get_by_role("heading", level=1)).to_have_text("高風險")
+    assert scan_count(server) == 2
+
+
 # ---- 異常輸入 ----
 
 @pytest.mark.parametrize("bad", ["not a url", "javascript:alert(1)", "http://a b.com", "localhost"])

@@ -27,3 +27,7 @@ test-results/
 
 # Playwright MCP 的暫存輸出
 .playwright-mcp/
+
+# 初審文件含姓名學號，不公開
+docs/report/*.docx
+docs/report/*.pdf

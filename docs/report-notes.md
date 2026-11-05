@@ -384,3 +384,12 @@
 - repo：https://github.com/peggy918/Phishing_Website_Detection （公開，預設分支 main）
 - 版本 `46d7922` 在全新 Windows 虛擬機通過：安裝套件、安裝瀏覽器、跑測試。執行紀錄：https://github.com/peggy918/Phishing_Website_Detection/actions/runs/42048763483
 - 範圍：測試用 SQLite 與假模型，沒有驗證 SQL Server 與真實模型。那部分的驗證見「SQL Server 實測」與「重建預演」。
+
+---
+
+## 階段 5（2026-11-06）定版前補強
+
+佐證摘要：`docs/results/testing-evidence.md`。
+- 補測斷線、資料庫失敗、20 人同時操作（→ p.16 G7、p.5、p.9）。
+- 刻意改錯 20 處，第一輪漏 2 處，補測試後都抓到（→ p.7 G2、P3）。
+- 量測 SQL Server 效能與程式複雜度（→ p.12、p.16）。
