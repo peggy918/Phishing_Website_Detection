@@ -80,7 +80,7 @@ phishguard/
 - [x] 階段 1：normalizer + brand_match + features + 單元測試（2026-11-01；169 項測試）
 - [x] 階段 2：三模型訓練與評估、決定門檻（2026-11-03；LightGBM，中 0.425／高 0.797；結果見 `docs/results/stage2-evaluation.md`）
 - [x] 階段 3：Flask MVC + 資料庫 + 偵測頁 + 管理者匯入（2026-11-05；已在 SQL Server 驗證；網站品牌「一網打詐 NetCatch」，程式內部維持 PhishGuard）
-- [ ] 階段 4：紀錄、安全、E2E、重建驗證（2026-11-05 程式完成，347 項測試；**待推上 GitHub 並確認 Actions**）
+- [x] 階段 4：紀錄、安全、E2E、重建驗證（2026-11-05；356 項測試；GitHub Actions 通過；本人決定不另做乾淨環境重建，p.13 需如實說明）
 - [ ] 階段 5：初審文件撰寫（11/9–11/10）
 
 ## 待解決事項

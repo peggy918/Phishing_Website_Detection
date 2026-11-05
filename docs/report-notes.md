@@ -379,3 +379,8 @@
 - 完整回應只存本機資料庫的 `whois_record.raw_response`，備份在 `data/raw/whois/`（不進 git）。repo 只留遮蔽摘要：不含信箱，個人註冊者顯示 `(個人，已遮蔽)`，用途是讓空資料庫能建立初始資料。
 - 訓練資料仍由檔案產生：資料庫內容會變動，檔案可計算雜湊並重現模型（G4、ModelVersion）。
 - 有測試檢查公開檔案不含信箱與電話；有測試確認刪掉資料庫紀錄後，網域就不能進白名單；重新匯入摘要不會蓋掉本機完整回應。
+
+### GitHub Actions 首次通過（2026-11-05，→ p.13 G4）
+- repo：https://github.com/peggy918/Phishing_Website_Detection （公開，預設分支 main）
+- 版本 `46d7922` 在全新 Windows 虛擬機通過：安裝套件、安裝瀏覽器、跑測試。執行紀錄：https://github.com/peggy918/Phishing_Website_Detection/actions/runs/42048763483
+- 範圍：測試用 SQLite 與假模型，沒有驗證 SQL Server 與真實模型。那部分的驗證見「SQL Server 實測」與「重建預演」。
