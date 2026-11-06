@@ -8,6 +8,7 @@
 5. 路徑與參數中的非 ASCII 字元與空白以百分比編碼統一（已編碼者不重複編碼），路徑空白視為「/」；
    主機名含空白則視為無效輸入
 6. 保留 fragment（政府資料常見 #/login 這類前端路由），空 fragment 去掉
+7. 還原去連結格式（hxxps://example[.]top），使用者從本站結果頁複製回來重查時判定不變
 
 不變性：加上追蹤參數、改變主機名大小寫、加 www. 後，正規化結果必須相同。
 """
@@ -30,6 +31,8 @@ _DEFAULT_PORTS = {"http": 80, "https": 443}
 _SAFE_PATH = "/:@!$&'()*+,;=-._~%"
 _SAFE_QUERY = _SAFE_PATH + "?"
 MAX_URL_LENGTH = 4096
+# 去連結格式：只認開頭的 hxxp(s)，[.] 與 [:] 則全文還原（已確認對訓練資料沒有任何改動，見 docs/results/mcp-comparison.md F1）
+_DEFANGED_SCHEME_RE = re.compile(r"^hxxp(s?)(?:\[:\]|:)//", re.IGNORECASE)
 
 
 class InvalidURL(ValueError):
@@ -74,6 +77,12 @@ class NormalizedURL:
 def strip_junk(url: str) -> str:
     """去除前後空白與開頭的標點（複製貼上常帶入的 ; , 引號、括號）。"""
     return url.strip().lstrip(_LEADING_JUNK).strip()
+
+
+def refang(url: str) -> str:
+    """還原去連結格式：hxxps://example[.]top → https://example.top。與 defang() 互為反向。"""
+    url = _DEFANGED_SCHEME_RE.sub(lambda m: f"http{m.group(1).lower()}://", url, count=1)
+    return url.replace("[.]", ".").replace("[:]", ":")
 
 
 def ensure_scheme(url: str) -> str:
@@ -152,7 +161,7 @@ def _to_ascii_host(host: str) -> str:
 def normalize(raw: str) -> NormalizedURL:
     if not isinstance(raw, str):
         raise InvalidURL("網址必須是字串")
-    text = strip_junk(raw)
+    text = refang(strip_junk(raw))
     if not text:
         raise InvalidURL("網址是空的")
     if len(text) > MAX_URL_LENGTH:
@@ -160,8 +169,8 @@ def normalize(raw: str) -> NormalizedURL:
     had_scheme = bool(_SCHEME_RE.match(text))
     try:
         parts = urlsplit(ensure_scheme(text))
-    except ValueError as e:  # 例如不合法的 IPv6 方括號
-        raise InvalidURL(f"無法解析：{e}") from e
+    except ValueError as e:  # 例如不合法的 IPv6 方括號；不把程式內部的英文訊息顯示給使用者
+        raise InvalidURL("這看起來不是有效的網址，請確認後再試一次") from e
     scheme = parts.scheme.lower()
     if scheme not in ("http", "https"):
         raise InvalidURL(f"不支援的 scheme：{scheme}")

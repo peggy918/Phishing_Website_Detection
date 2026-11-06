@@ -1,7 +1,9 @@
 """階段 1：完整正規化。測資優先取自政府通報清單（括號內為原始編號）。"""
+from dataclasses import replace
+
 import pytest
 
-from app.services.normalizer import InvalidURL, defang, normalize
+from app.services.normalizer import InvalidURL, defang, normalize, refang
 
 GOV_URLS = [
     "https://tobuyersepc24.com/57vgaqk#/login",                     # 1
@@ -115,6 +117,40 @@ def test_storage_url_drops_query_and_fragment():
 
 def test_defang():
     assert defang("https://tw06.shopeelem.xyz/") == "hxxps://tw06[.]shopeelem[.]xyz/"
+
+
+# MCP 比較（docs/results/mcp-comparison.md F1）發現：貼入本站顯示的去連結格式會出現英文錯誤訊息
+
+@pytest.mark.parametrize("url", GOV_URLS + ["http://a.com/x?a=1&b=2#top", "http://127.0.0.1:8080/admin"])
+def test_defanged_input_gives_same_result(url):
+    n = normalize(url)
+    again = normalize(defang(n.url))
+    assert replace(again, raw=n.url) == normalize(n.url)     # 除了原始輸入，其餘欄位都相同
+    assert normalize(defang(n.storage_url)).storage_url == n.storage_url
+
+
+@pytest.mark.parametrize("defanged, expected", [
+    ("hxxp://tw06[.]shopeelem[.]xyz/", "http://tw06.shopeelem.xyz/"),
+    ("HXXPS://shopee[.]tw/", "https://shopee.tw/"),
+    ("hxxps[:]//shopee[.]tw/", "https://shopee.tw/"),
+    ("tw06[.]shopeelem[.]xyz", "tw06.shopeelem.xyz"),
+])
+def test_refang(defanged, expected):
+    assert refang(defanged) == expected
+
+
+@pytest.mark.parametrize("url", [
+    "http://www.hitsem.com/images/?hxxp:/us.battle.net/login",   # Kaggle 資料：hxxp 不在開頭，不可改動
+    "http://[::1]/",                                              # IPv6 方括號不受影響
+])
+def test_refang_leaves_other_text_alone(url):
+    assert refang(url) == url
+
+
+def test_parse_error_message_is_chinese():
+    with pytest.raises(InvalidURL, match="不是有效的網址") as e:
+        normalize("http://[bad/")
+    assert "Invalid" not in str(e.value)
 
 
 @pytest.mark.parametrize("url", GOV_URLS + ["http://a.com/x?a=1&amp;b=2", "HTTP://WWW.A.COM"])

@@ -122,6 +122,15 @@ def test_shortener_reason_does_not_blame_its_tld(db, tmp_path):
     assert any("短網址" in reason for reason in reasons) and not any("結尾" in reason for reason in reasons)
 
 
+def test_defanged_input_does_not_change_result(db, tmp_path):
+    add_model(db, tmp_path, probability=0.5)
+    db.commit()
+    a = scan(db, "https://plain-example-site.org/a?id=1")
+    b = scan(db, "hxxps://plain-example-site[.]org/a?id=1")
+    assert (a.risk_level, a.probability, a.storage_url) == (b.risk_level, b.probability, b.storage_url)
+    assert scan(db, "hxxp://tw06[.]shopeelem[.]xyz/").decided_by == "blacklist"
+
+
 def test_tracking_params_do_not_change_result(db, tmp_path):
     add_model(db, tmp_path, probability=0.5)
     db.commit()

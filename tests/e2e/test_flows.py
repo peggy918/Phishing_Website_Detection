@@ -37,6 +37,13 @@ def test_blacklisted_url_is_high_risk_and_defanged(page: Page, server):
     assert page.locator('a[href*="shopeelem"], a[href*="hxxp"]').count() == 0     # 不可產生可點擊連結
 
 
+def test_copying_defanged_result_back_gives_same_result(page: Page, server):
+    # MCP 比較 F1：使用者複製結果頁顯示的網址回來重查，原本會出現英文錯誤訊息
+    check(page, server, "hxxp://tw06[.]shopeelem[.]xyz/")
+    expect(page.get_by_role("heading", level=1)).to_have_text("高風險")
+    expect(page.locator(".defanged")).to_have_text("hxxp://tw06[.]shopeelem[.]xyz/")
+
+
 def test_official_domain_never_says_safe(page: Page, server):
     check(page, server, "https://shopee.tw/")
     expect(page.get_by_role("heading", level=1)).to_have_text("未發現明顯風險跡象")
