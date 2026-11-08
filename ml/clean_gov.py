@@ -45,6 +45,8 @@ def annotate(df: pd.DataFrame) -> pd.DataFrame:
         field_host, _ = split_host(r.domain_field)
         reg = registered_domain(host)
         level, key = match_key(host)
+        if reg in review:  # 一般網站底下的子網域：和黑名單匯入一樣只比完整主機名（app/services/gov_import.py）
+            level, key = "hostname", host.removeprefix("www.")
         out.append({
             "url_fixed": ensure_scheme(r.raw_url),
             "host": host,
@@ -78,7 +80,8 @@ def annotate(df: pd.DataFrame) -> pd.DataFrame:
     df["dup_of"] = df["dup_of"].astype("Int64")
     df["is_duplicate"] = df["dup_of"].notna()
 
-    df["use_for_training"] = ~df["is_duplicate"] & ~df["needs_review"]
+    # 2026-11-08 本人決定：政府通報為準，一般網站底下的子網域（needs_review）也作為訓練正例
+    df["use_for_training"] = ~df["is_duplicate"]
     return df
 
 

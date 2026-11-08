@@ -78,7 +78,7 @@ phishguard/
 - [x] 規劃完成（2026-10-31）
 - [x] 階段 0：環境建立、資料清理（政府 XML、Kaggle CSV）、台灣正常網域、brands.yaml（2026-10-31；brands.yaml 官方網域已於 2026-11-08 由 AI 查證，見 `docs/domain-review.md`）
 - [x] 階段 1：normalizer + brand_match + features + 單元測試（2026-11-01；169 項測試）
-- [x] 階段 2：三模型訓練與評估、決定門檻（2026-11-03；LightGBM，中 0.425／高 0.797；結果見 `docs/results/stage2-evaluation.md`）
+- [x] 階段 2：三模型訓練與評估、決定門檻（2026-11-03；2026-11-08 把 7 筆政府通報納入訓練後重訓為第三版：LightGBM，中 0.444／高 0.786；結果見 `docs/results/stage2-evaluation.md`，第二版保留於 `stage2-evaluation-v2.md`）
 - [x] 階段 3：Flask MVC + 資料庫 + 偵測頁 + 管理者匯入（2026-11-05；已在 SQL Server 驗證；網站品牌「一網打詐 NetCatch」，程式內部維持 PhishGuard）
 - [x] 階段 4：紀錄、安全、E2E、重建驗證（2026-11-05；356 項測試；GitHub Actions 通過；本人決定不另做乾淨環境重建，p.13 需如實說明）
 - [ ] 階段 5：初審文件撰寫（11/9–11/10；評分版本標籤 v1.0-review）

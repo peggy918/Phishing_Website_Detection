@@ -48,7 +48,18 @@ def test_out_of_order_ids(df):
 def test_platform_and_review(df):
     gh = df[df["registered_domain"] == "github.io"].iloc[0]
     assert gh["is_platform"] and gh["match_level"] == "hostname" and gh["created_date_unreliable"]
-    assert df.loc[886, "needs_review"] and not df.loc[886, "use_for_training"]  # ecpay.com 子網域
+    # ecpay.com 子網域：只比完整主機名；政府通報為準，也作為訓練正例（2026-11-08）
+    assert df.loc[886, "needs_review"] and df.loc[886, "use_for_training"]
+    assert (df.loc[886, "match_level"], df.loc[886, "match_key"]) == ("hostname", "niconsortiu.ecpay.com")
+
+
+def test_review_subdomains_are_not_duplicates_of_each_other():
+    # 886／889／893 都是 ecpay.com 子網域：依註冊網域去重會只剩 886，依主機名則三筆都保留
+    raw = parse_xml(FIXTURE)
+    row = raw[raw["record_id"] == 886]
+    other = row.assign(record_id=893, raw_url="http://retailpark.ecpay.com", domain_field="retailpark.ecpay.com")
+    out = annotate(pd.concat([row, other], ignore_index=True)).set_index("record_id")
+    assert not out["is_duplicate"].any() and out["use_for_training"].all()
 
 
 def test_tracking_params_detected(df):
