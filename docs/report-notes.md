@@ -398,6 +398,10 @@
 - 刻意改錯 20 處，第一輪漏 2 處，補測試後都抓到（→ p.7 G2、P3）。
 - 量測 SQL Server 效能與程式複雜度（→ p.12、p.16）。
 
+### 初審文件初稿（2026-11-09）
+- `docs/report/初審文件_初稿.docx`（Word 檔與 PDF 不進 git）：由 AI 依評分表 v26 的 33 頁主題與本檔素材撰寫；黃底為需本人補寫或確認之處，個人頁（p.17、21、25、29）只有素材提示，須本人用自己的話寫。
+- 資料流程圖原本寫「平台與待確認比完整主機名」，與「政府通報不標待確認」的決定不一致，改為「平台與指定子網域比主機名」並重新產生（`docs/report/make_diagrams.py`）。
+
 ### MCP 測試比較（2026-11-05，→ p.16 G7，摘要可放 p.12）
 - [ ] **本節與 `docs/results/mcp-comparison.md` 由 AI 操作瀏覽器、判斷結果並撰寫，需由本人核對後勾選。**
 - 完整內容：`docs/results/mcp-comparison.md`。測試用腳本、JUnit 報告與呼叫統計（不進 git）：`C:\Users\User\AppData\Roaming\Claude\side-session-notes\local_387748c2-4f5c-48c4-92c4-1a65c77d6202\mcp-comparison-evidence\`。
