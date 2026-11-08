@@ -27,7 +27,7 @@
 | 含 @（userinfo 偽裝） | 3 | 1280、1281、1212（`easywallet.com0165302705@vip.jkpay-officiali.com`，偽裝成悠遊付網址）| 主機名取 @ 之後（1212 為**新發現**） |
 | 編號不依時間排序 | 54 | 1320–1373（通報日期回到 2025-03/04） | 時間切分依「接獲通報日期」 |
 | 平台型網域 | 49 | github.io 32、carrd.co 7、其他 10 | 比對完整主機名；創建日期不可靠 |
-| 疑似一般／遭入侵網站 | 7 | 882 shopex.cn、886/889/893 ecpay.com、906 amsdi.com.ph、1284 hsblood.org.cn、1320 googleinvest.com | 標記待確認，不作為訓練正例 |
+| 疑似一般／遭入侵網站 | 7 | 882 shopex.cn、886/889/893 ecpay.com、906 amsdi.com.ph、1284 hsblood.org.cn、1320 googleinvest.com | 黑名單只比完整主機名，不作為訓練正例（2026-11-08 起以政府通報為準，不再稱「待確認」） |
 | 含廣告追蹤參數 | 533 | 1373（fbclid + 10 個 utm／廣告參數） | 階段 1 正規化去除；**fbclid 捷徑素材（→ p.6–7 G2）** |
 
 - 去重後 1,634 個比對鍵，可用於訓練 1,629 筆。
@@ -101,9 +101,10 @@
 - **待辦**：加入 Tranco 熱門 .tw 網域；正常資料目前只有網域，沒有路徑，階段 2 需注意「網址長短」造成的捷徑。
 
 ### AI 產生內容（待本人核對）
-- [ ] `config/brands.yaml`：官方網域由 AI 依常識整理，全部標記 `verified: false`，需逐一上官網確認；樂信創意、美無痕、客林國際、華麗熊的官方網域留空。
-- [ ] `config/rules.yaml`：可疑 TLD 依政府資料統計整理；平台、短網址、關鍵字清單由 AI 整理。
-- [ ] `data/reference/tw_popular_domains.txt`：AI 整理，需核對。
+- `config/brands.yaml` 官方網域：**2026-11-08 已由 AI 查證，不需本人上官網**（本人指出：要本人連上去確認，萬一不是官網就等於進了可疑網站）。查證方式與結果見本檔「2026-11-08 品牌網域查證」。
+- `config/rules.yaml`：可疑 TLD 依政府資料統計整理（政府資料為可信來源，不需本人再核對）。
+- [ ] `config/rules.yaml`：平台、短網址、關鍵字清單由 AI 整理。
+- `data/reference/tw_popular_domains.txt`：AI 整理；71 個網域都出現在 Tranco 排行，且都不在政府詐騙清單（`ml/verify_domains.py`），不需本人逐一核對。
 - [ ] `app/services/normalizer.py`、`app/config_loader.py`、`ml/clean_gov.py`、`ml/clean_kaggle.py`、`ml/build_tw_legit.py`
 - [ ] `tests/unit/test_normalizer_stage0.py`、`tests/unit/test_clean_gov.py`（fixture `tests/fixtures/gov_sample.xml` 為原始 XML 的 15 筆真實紀錄）
 
@@ -265,7 +266,7 @@
 
 ### AI 產生內容（待本人核對，階段 2 追加）
 - [ ] `app/services/risk.py`、`tests/unit/test_risk.py`、`ml/tune_brand.py`
-- [ ] brands.yaml 新增的 7 個國際品牌（官方網域只確認存在於 Tranco，品牌歸屬待本人核對）
+- brands.yaml 新增的 7 個國際品牌：2026-11-08 已由 AI 以 Wikidata 官方網站欄位查證，7 個都相符。
 
 ### 參數搜尋與種子穩定度（2026-11-03，本人要求，→ p.8–12 G3）
 `ml/tune_models.py`，結果 `docs/results/model-tuning.md`。只用訓練集訓練、驗證集評分，未讀測試集，未更換上線模型。
@@ -284,8 +285,8 @@
 
 ### 本人決定（→ p.8–12 G3、p.14 G5）
 1. 使用者內容與短網址的官方網域不進白名單（live.com、facebook.com、instagram.com、fb.com、line.me、lin.ee、t.me、shp.ee、dcard.link、momo.dm）：仍算官方、不觸發冒用規則，交給模型判斷。起因是 Kaggle 有 12 筆 OneDrive 釣魚連結。
-2. 白名單只收有歸屬佐證者：brands.yaml 112 個網域中 77 個有佐證，扣除上述 5 個後收 72 個（v2fly 37、TWNIC WHOIS 22、本人官網確認 13）。其餘 35 個（AI 整理 28、只確認存在於 Tranco 7）核對後才加入。
-3. 7 筆待確認通報只比完整主機名，結果頁標示「尚待人工確認」，不會把整個 ecpay.com 判成高風險。
+2. 白名單只收有歸屬佐證者：brands.yaml 112 個網域中 77 個有佐證，扣除上述 5 個後收 72 個（v2fly 37、TWNIC WHOIS 22、本人官網確認 13）。其餘 35 個（AI 整理 28、只確認存在於 Tranco 7）核對後才加入。**2026-11-08 更新**：35 個中 31 個查到佐證，白名單增為 99 個；見本檔「2026-11-08 品牌網域查證」。
+3. 7 筆位於一般網站網域底下的通報只比完整主機名，不會把整個 ecpay.com 判成高風險。**2026-11-08 本人決定**：政府通報是政府確認過的資料，以通報為準；結果頁原本寫「尚待人工確認」，改為說明「通報範圍是這個完整主機名，同一網域底下的其他網址不受此筆通報影響」。判定結果（高風險）不變。
 
 ### 安全設計（→ p.14 G5）
 - **不連線**：有測試把 socket 連線與 DNS 查詢都換成會失敗，偵測流程照常跑完。
@@ -415,3 +416,39 @@
 - **結論**：三種工具在 10 個情境都沒有測出功能失敗。pytest 適合回歸測試，Playwright MCP 適合探索操作，DevTools MCP 適合診斷（效能、標頭、CSP）。新問題多半來自 AI 多試了腳本以外的輸入，補上測試後 pytest 也抓得到。
 - **沒測到**：真實模型下的中風險頁面、SQL Server、Tunnel、真人、真實手機、其他瀏覽器。
 - **G7「撰寫測試以外的人核對」**：本比較也是 AI 協助審查的一部分，不等於他人核對；本人核對方式待填。
+
+---
+
+## 2026-11-08 品牌網域查證（→ p.8–12 G3 資料來源、p.14 G5、P3）
+
+**起因（本人指出）**：原本要本人逐一上官網確認 brands.yaml 的官方網域。但如果那個網域其實不是官網，本人連上去就等於進了可疑網站。改由 AI 用不必連線該網域的公開資料查證。同時本人決定：**政府資料是可信來源，不需本人再核對。**
+
+**查證方式**（都不連線被查的網域，與系統「不連線被檢查網址」原則一致）：
+
+| 方式 | 適用 | 依據 |
+|---|---|---|
+| TWNIC WHOIS | `.tw` 網域 | 註冊者是可辨識的公司或機關，且與品牌相符 |
+| gov.tw 規則 | `.gov.tw` 網域 | gov.tw 只能由政府機關註冊 |
+| Wikidata | 國際網域 | 品牌條目的「官方網站」欄位（P856）指向該網域 |
+| RDAP | Wikidata 查不到時 | 註冊者組織（多數已被註冊商遮蔽） |
+
+**結果**：原本沒有佐證的 35 個網域中，31 個查到佐證，白名單由 72 個增為 99 個，原有的沒有移除。
+
+| 結果 | 數量 | 網域 |
+|---|---|---|
+| TWNIC WHOIS | 11 | ecpay.com.tw、i-pass.com.tw、easycard.com.tw、etmall.com.tw、skm.com.tw、kingstone.com.tw、kfcclub.com.tw、foodpanda.com.tw、t-cat.com.tw、7-11.com.tw、bot.com.tw |
+| gov.tw | 3 | post.gov.tw、mof.gov.tw、nat.gov.tw |
+| Wikidata | 16 | whoscall.com、signal.org、microsoft.com、live.com、meta.com、facebook.com、instagram.com、telegram.org、diptyqueparis.com、byredo.com、maisonmargiela.com、loewe.com、hoka.com、salomon.com、thombrowne.com、ctbcbank.com |
+| RDAP | 1 | fb.com（Meta Platforms, Inc.） |
+| 查無佐證 | 4 | friday.tw（WHOIS 註冊者被遮蔽）、newebpay.com、esunbank.com（Wikidata 列的是 esunbank.com.tw）、t.me |
+
+- live.com、facebook.com、instagram.com、fb.com 有佐證，但屬於使用者可放內容的網域（no_whitelist），仍不進白名單。
+- 查無佐證的 4 個仍算官方網域（不觸發冒用規則），但不進白名單，交給模型判斷。
+- 樂信創意（可樂研究社）、美無痕生物科技、客林國際、華麗熊：以網路搜尋查不到可信的官方網站，維持空白。這些品牌名稱取自政府資料，品牌名稱本身不需核對；只是沒有官方網域可列入白名單。
+- 完整清單由程式產生：`docs/domain-review.md` 第三節。
+
+**查證中發現並修正的問題**（→ p.15 G6）：
+1. 原本只要資料庫有 WHOIS 紀錄就算佐證，沒有檢查註冊者是不是空白或已遮蔽。friday.tw 的註冊者被遮蔽，原本會被誤收進白名單。改為：註冊者必須是可辨識的公司或機關；有核對紀錄時以紀錄為準（`app/services/reference_data.py`），並補測試。
+2. 重新查詢 WHOIS 時，摘要檔被重新產生，一位個人註冊者的姓名被還原成明文。提交前發現並重新遮蔽，並修改 `ml/whois_check.py`：重建摘要時保留已遮蔽的個人註冊者（已實際重跑確認摘要不變）。
+
+**對模型的影響**：brands.yaml 只移除了沒有用到的 `verified` 欄位，網域沒有變。重算訓練資料 16,629 筆 × 48 個特徵，0 格不同，不需重新訓練。白名單變多只影響「跳過模型直接判低風險」的網域。

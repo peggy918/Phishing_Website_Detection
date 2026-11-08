@@ -1,6 +1,8 @@
 # 品牌對照表：品牌近似特徵、白名單與判斷原因都從這裡取。
 # aliases：用於對應政府資料「一頁式數位經濟詐騙網站」欄位與簡訊文字（不分大小寫，子字串比對，先列者優先）。
-# domains：官方註冊網域（eTLD+1）。verified: false 代表由 AI 依常識整理，需本人逐一核對。
+# domains：官方註冊網域（eTLD+1）。每個網域的歸屬佐證記在資料庫（初始資料：data/reference/domain_reviews.csv、
+#   whois_summary.csv），沒有佐證的網域仍算官方網域，但不進白名單。2026-11-08 由 AI 以 TWNIC WHOIS、Wikidata、
+#   RDAP 查證，不連線被查的網域；原本的 verified 欄位已移除。
 # keywords：品牌在網域中常見的字串片段，用於品牌近似判斷。
 # source：v2fly 代表網域取自 https://github.com/v2fly/domain-list-community/tree/master/data（MIT 授權，2026-10-31 取得），
 #         只保留註冊網域，CDN 主機（full:）與非台灣相關網域不收。未註明者為 AI 依常識整理。
@@ -8,7 +10,7 @@
 # 2026-10-31 以 TWNIC WHOIS 核對註冊者後補入的網域，摘要見 data/reference/whois_summary.csv，完整回應只存本機資料庫。
 # no_whitelist：官方網域，但任何人都能放內容或做短網址（OneDrive、Facebook、LINE 邀請連結…）。
 #   仍算官方、不觸發冒用規則，但不進白名單，交給模型判斷（2026-11-03 本人決定）。
-version: "2026.11.03-2"
+version: "2026.11.08-1"
 
 brands:
   - key: momo
@@ -18,14 +20,12 @@ brands:
     no_whitelist: [momo.dm]
     keywords: [momo]
     source: v2fly
-    verified: false
   - key: pchome
     name: PChome 24h購物
     aliases: [pchome]
     domains: [pchome.com.tw, pchomeonline.com.tw, pchomeec.tw, pchomepay.com.tw, pcstore.com.tw, ecimg.tw, piapp.com.tw, pchome.tw, pchomebiz.com.tw]
     keywords: [pchome, pc24]
     source: v2fly
-    verified: false
   - key: shopee
     name: 蝦皮購物
     aliases: [蝦皮, shopee]
@@ -33,7 +33,6 @@ brands:
     no_whitelist: [shp.ee]
     keywords: [shopee]  # 不放 shoppe：會命中 shopping、shoppers，由近似比對處理
     source: v2fly
-    verified: false
   - key: rakuten
     name: 台灣樂天市場
     aliases: [樂天, rakuten]
@@ -41,38 +40,32 @@ brands:
     related_domains: [rakuten-bank.com.tw]
     keywords: [rakuten]
     source: v2fly
-    verified: false
   - key: books
     name: 博客來
     aliases: [博客來]
     domains: [books.com.tw, book.com.tw]
     keywords: [books]
     source: v2fly
-    verified: false
   - key: newebpay
     name: 藍新金流
     aliases: [藍新]
     domains: [newebpay.com]
     keywords: [newebpay, neweb]
-    verified: false
   - key: ecpay
     name: 綠界科技
     aliases: [綠界, ecpay]
     domains: [ecpay.com.tw]
     keywords: [ecpay]
-    verified: false
   - key: ipass
     name: 一卡通
     aliases: [一卡通, ipass]
     domains: [i-pass.com.tw]
     keywords: [ipass, i-pass]
-    verified: false
   - key: easycard
     name: 悠遊卡
     aliases: [悠遊卡, easycard]
     domains: [easycard.com.tw]
     keywords: [easycard, ezcard]
-    verified: false
   - key: line
     name: LINE
     aliases: [line]
@@ -81,88 +74,74 @@ brands:
     related_domains: [linebank.com.tw]
     keywords: [line]
     source: v2fly
-    verified: false
   - key: etmall
     name: 東森購物
     aliases: [東森]
     domains: [etmall.com.tw]
     keywords: [etmall]
-    verified: false
   - key: skm
     name: 新光三越
     aliases: [新光三越]
     domains: [skm.com.tw]
     keywords: [skm]
-    verified: false
   - key: kingstone
     name: 金石堂
     aliases: [金石堂]
     domains: [kingstone.com.tw]
     keywords: [kingstone]
-    verified: false
   - key: mcdonalds
     name: 台灣麥當勞
     aliases: [麥當勞]
     domains: [mcdonalds.com.tw]
     keywords: [mcdonald]
-    verified: false
   - key: kfc
     name: 肯德基
     aliases: [肯德基]
     domains: [kfcclub.com.tw]
     keywords: [kfc]
-    verified: false
   - key: gogolook
     name: Gogolook（Whoscall）
     aliases: [gogolook, whoscall]
     domains: [gogolook.com, whoscall.com]
     keywords: [gogolook, whoscall]
-    verified: false
   - key: signal
     name: Signal
     aliases: [signal]
     domains: [signal.org]
     keywords: [signal]
-    verified: false
   - key: microsoft
     name: Microsoft
     aliases: [teams, microsoft]
     domains: [microsoft.com, live.com]
     no_whitelist: [live.com]
     keywords: [microsoft, teams]
-    verified: false
   - key: meta
     name: Meta／Facebook
     aliases: [meta, facebook]
     domains: [meta.com, facebook.com, fb.com, instagram.com]
     no_whitelist: [facebook.com, fb.com, instagram.com]
     keywords: [facebook, meta, instagram]
-    verified: false
   - key: friday
     name: friDay購物（遠時數位）
     aliases: [遠時數位]
     domains: [friday.tw]
     keywords: [friday]
-    verified: false
   - key: softworld
     name: 智冠科技
     aliases: [智冠]
     domains: [soft-world.com.tw]
     keywords: [softworld, soft-world]
-    verified: false
   - key: telegram
     name: Telegram
     aliases: [telegram]
     domains: [telegram.org, t.me]
     no_whitelist: [t.me]
     keywords: [telegram]
-    verified: false
   - key: foodpanda
     name: foodpanda（富胖達）
     aliases: [富胖達, foodpanda]
     domains: [foodpanda.com.tw, foodpanda.tw]
     keywords: [foodpanda]
-    verified: false
   # 台灣常見網站（v2fly）：政府資料中未出現，但屬台灣熱門網站，供白名單與品牌近似判斷
   - key: ruten
     name: 露天拍賣
@@ -170,7 +149,6 @@ brands:
     domains: [ruten.com.tw, rimg.com.tw]
     keywords: [ruten]
     source: v2fly
-    verified: false
   - key: dcard
     name: Dcard
     aliases: [dcard]
@@ -178,63 +156,54 @@ brands:
     no_whitelist: [dcard.link]
     keywords: [dcard]
     source: v2fly
-    verified: false
   - key: ptt
     name: PTT 批踢踢
     aliases: [ptt, 批踢踢]
     domains: [ptt.cc]
     keywords: [ptt]
     source: v2fly
-    verified: false
   - key: bahamut
     name: 巴哈姆特
     aliases: [巴哈姆特]
     domains: [gamer.com.tw, bahamut.com.tw]
     keywords: [gamer, bahamut]
     source: v2fly
-    verified: false
   - key: mobile01
     name: Mobile01
     aliases: [mobile01]
     domains: [mobile01.com]
     keywords: [mobile01]
     source: v2fly
-    verified: false
   - key: kkbox
     name: KKBOX／KKTIX
     aliases: [kkbox, kktix]
     domains: [kkbox.com, kkbox.com.tw, kktix.com, kfs.io]
     keywords: [kkbox, kktix]
     source: v2fly
-    verified: false
   - key: udn
     name: 聯合新聞網
     aliases: [聯合新聞, udn]
     domains: [udn.com, udn.com.tw, udnfunlife.com]
     keywords: [udn]
     source: v2fly
-    verified: false
   - key: ltn
     name: 自由時報
     aliases: [自由時報]
     domains: [ltn.com.tw]
     keywords: [ltn]
     source: v2fly
-    verified: false
   - key: cht
     name: 中華電信
     aliases: [中華電信, hinet]
     domains: [cht.com.tw, emome.net, hinet.tw, hinetcdn.net.tw]
     keywords: [cht, hinet, emome]
     source: v2fly
-    verified: false
   - key: twca
     name: 台灣網路認證（TWCA）
     aliases: [twca, 台灣網路認證]
     domains: [twca.com.tw]
     keywords: [twca]
     source: v2fly
-    verified: false
   # 國際品牌（2026-11-01 加入）：政府資料中被冒用的精品與運動品牌，多以 .com.tw／.tw 網域仿冒。
   # diptyque、byredo、maison margiela、loewe 的冒用案例，政府資料記載的對象都是「客林國際」（台灣代理商）。
   # 官方網域皆出現在 Tranco 746VX（排名見各項 note），品牌歸屬為 AI 依常識整理，待本人核對。
@@ -244,135 +213,114 @@ brands:
     domains: [diptyqueparis.com]
     keywords: [diptyque]
     source: tranco
-    verified: false
   - key: byredo
     name: BYREDO
     aliases: [byredo]
     domains: [byredo.com]
     keywords: [byredo]
     source: tranco
-    verified: false
   - key: margiela
     name: Maison Margiela
     aliases: [margiela]
     domains: [maisonmargiela.com]
     keywords: [margiela]
     source: tranco
-    verified: false
   - key: loewe
     name: LOEWE
     aliases: [loewe]
     domains: [loewe.com]
     keywords: [loewe]
     source: tranco
-    verified: false
   - key: hoka
     name: HOKA
     aliases: [hoka]
     domains: [hoka.com]
     keywords: [hoka]
     source: tranco
-    verified: false
   - key: salomon
     name: Salomon
     aliases: [salomon]
     domains: [salomon.com]
     keywords: [salomon]
     source: tranco
-    verified: false
   - key: thombrowne
     name: Thom Browne
     aliases: [thom browne]
     domains: [thombrowne.com]
     keywords: [thombrowne, thom-browne]
     source: tranco
-    verified: false
   # 以下品牌在政府資料中出現，但官方網域尚未確認，留空待本人查證後補上
   - key: leshin
     name: 樂信創意（可樂研究社）
     aliases: [樂信]
     domains: []
     keywords: [colaresearch]
-    verified: false
   - key: meiwuhen
     name: 美無痕生物科技
     aliases: [美無痕]
     domains: []
     keywords: []
-    verified: false
   - key: kelin
     name: 客林國際
     aliases: [客林]
     domains: []
     keywords: []
-    verified: false
   - key: hualixiong
     name: 華麗熊
     aliases: [華麗熊]
     domains: []
     keywords: []
-    verified: false
   # 複審話術比對常用的冒用對象
   - key: post
     name: 中華郵政
     aliases: [中華郵政, 郵局]
     domains: [post.gov.tw, postmall.com.tw]
     keywords: [post]
-    verified: false
   - key: tcat
     name: 黑貓宅急便
     aliases: [黑貓, 宅急便]
     domains: [t-cat.com.tw]
     keywords: [tcat, t-cat]
-    verified: false
   - key: mof
     name: 財政部（電子申報繳稅）
     aliases: [財政部, 退稅]
     domains: [mof.gov.tw, nat.gov.tw]
     keywords: [etax, mof]
-    verified: false
   - key: seven
     name: 7-ELEVEN
     aliases: [7-11, 7-eleven, 統一超商]
     domains: [7-11.com.tw]
     keywords: ["7-11", "711"]
-    verified: false
   - key: family
     name: 全家便利商店
     aliases: [全家]
     domains: [family.com.tw]
     keywords: [family]
-    verified: false
   - key: cathay
     name: 國泰世華銀行
     aliases: [國泰]
     domains: [cathaybk.com.tw, cathay-cube.com.tw]
     related_domains: [cathaylife.com.tw, cathay-ins.com.tw, cathaysec.com.tw, cathaysite.com.tw]
     keywords: [cathay]
-    verified: false
   - key: ctbc
     name: 中國信託
     aliases: [中國信託, 中信]
     domains: [ctbcbank.com]
     keywords: [ctbc]
-    verified: false
   - key: esun
     name: 玉山銀行
     aliases: [玉山]
     domains: [esunbank.com.tw, esunbank.com]
     related_domains: [esunsec.com.tw]
     keywords: [esun]
-    verified: false
   - key: bot
     name: 臺灣銀行
     aliases: [臺灣銀行, 台灣銀行]
     domains: [bot.com.tw]
     keywords: []
-    verified: false
   - key: taishin
     name: 台新銀行
     aliases: [台新]
     domains: [taishinbank.com.tw]
     related_domains: [taishinart.org.tw]
     keywords: [taishin]
-    verified: false

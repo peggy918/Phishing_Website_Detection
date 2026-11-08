@@ -35,5 +35,6 @@ homoglyphs:
   vv: w
   cl: d
 
-# 政府資料中疑似一般網站或遭入侵網站：不作為典型正例，標記待人工確認
+# 政府通報中位於一般網站網域底下的子網域：黑名單只比完整主機名，避免牽連整個網域；不作為訓練正例
+# （以政府通報為準，結果頁不再標示「尚待人工確認」，2026-11-08）
 review_domains: [ecpay.com, hsblood.org.cn, shopex.cn, amsdi.com.ph, googleinvest.com]

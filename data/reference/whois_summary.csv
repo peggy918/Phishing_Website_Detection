@@ -1,5 +1,7 @@
 ﻿domain,found,registrant_zh,registrant_en,created,queried_at
 4gamers.com.tw,True,就肆電競股份有限公司,FORGAMERS INC.,2013-06-09,2026-10-31
+7-11.com.tw,True,統一超商股份有限公司,President Chain Store Corp.,1997-05-01,2026-11-08
+bot.com.tw,True,臺灣銀行股份有限公司,Bank of Taiwan,1997-05-01,2026-11-08
 cathay-cube.com.tw,True,國泰世華商業銀行股份有限公司,Cathay United Bank,2024-01-11,2026-10-31
 cathay-ins.com.tw,True,國泰世紀產物保險股份有限公司,"Cathay Century Insurance Co.,Ltd.",2002-06-07,2026-10-31
 cathaybk.com.tw,True,國泰世華商業銀行股份有限公司,Cathay United Bank,2003-04-28,2026-10-31
@@ -10,24 +12,37 @@ cathaysite.com.tw,True,國泰證券投資信託股份有限公司,"Cathay Securi
 chinapost.com.tw,True,今日傳媒股份有限公司,"NOWnews Network Co., Ltd.",1997-05-01,2026-10-31
 cht.com.tw,True,中華電信股份有限公司,"Chunghwa Telecom. Co., Ltd.",1997-05-01,2026-10-31
 ctbc.edu.tw,True,,,,2026-10-31
+easycard.com.tw,True,Taipei Smart Card Corp.,,2008-07-21,2026-11-08
+ecpay.com.tw,True,綠界科技股份有限公司,"Green World FinTech Service Co., Ltd",2001-09-06,2026-11-08
 esunbank.com.tw,True,玉山商業銀行股份有限公司,"E.SUN Commercial Bank, Ltd.",1997-05-01,2026-10-31
 esunsec.com.tw,True,玉山綜合證券股份有限公司,"E.SUN SECURITIES Co., Ltd",2000-08-28,2026-10-31
+etmall.com.tw,True,東森得易購股份有限公司,"EASTERN HOME SHOPPING AND LEISURE CO., LTD.",1999-12-03,2026-11-08
 family.com.tw,True,全家便利商店股份有限公司,"Taiwan Familymart Co., Ltd.",1997-05-01,2026-10-31
 familyshoes.com.tw,True,MERCURIES ASSOCIATES,,1997-05-01,2026-10-31
 familystar.org.tw,True,親子觀星會,FamilyStar,2006-05-07,2026-10-31
 fast-line.tw,True,,,2019-12-21,2026-10-31
+foodpanda.com.tw,True,Delivery Hero SE,,2012-01-30,2026-11-08
+friday.tw,True,,,2014-03-12,2026-11-08
 gamer.com.tw,True,旺普網路資訊股份有限公司,Oneup Network Corp.,2000-07-10,2026-10-31
 hinet.tw,True,"Network Technology Group, Chunghwa Telecom Co., Ltd.",,2005-10-27,2026-10-31
 hinetcdn.net.tw,True,Data Communication Business Group,,2013-12-20,2026-10-31
+i-pass.com.tw,True,IPASS CORPORATION,,2012-08-30,2026-11-08
+kfcclub.com.tw,True,"Jardine Food Services (Taiwan) Co., Ltd.",,2001-06-08,2026-11-08
+kingstone.com.tw,True,金石網絡股份有限公司,"Digital Kingstone Co., Ltd.",1997-05-01,2026-11-08
 lineage182.tw,True,,,2018-08-22,2026-10-31
 linebank.com.tw,True,LY Corporation,,2019-04-15,2026-10-31
+mof.gov.tw,False,,,,2026-11-08
 momo.com.tw,True,富邦媒體科技股份有限公司,momo.com Inc.,2014-04-29,2026-10-31
 moto-lines.com.tw,True,"Moto-Lines Co., Ltd.",,2014-05-07,2026-10-31
+nat.gov.tw,False,,,,2026-11-08
+post.gov.tw,False,,,,2026-11-08
 postmall.com.tw,True,中華郵政股份有限公司,"Chunghwa Post Co., Ltd.",2010-04-26,2026-10-31
 rakuten-bank.com.tw,True,Waterland Financial Holdings,,2019-03-07,2026-10-31
 rakuten.com.tw,True,"Rakuten Group, Inc.",,2003-12-18,2026-10-31
 shopee.tw,True,Shopee Singapore Private Limited,,2014-11-28,2026-10-31
 shopeepay.tw,True,ShopeePay Private Limited,,2017-07-28,2026-10-31
+skm.com.tw,True,新光三越百貨股份有限公司,新光三越百貨股份有限公司,1997-05-01,2026-11-08
+t-cat.com.tw,True,統一速達股份有限公司,President Transnet Corp.,2000-08-16,2026-11-08
 taishinart.org.tw,True,財團法人台新銀行文化藝術基金會,Taishin Bank Foundation for Arts and Culture,2005-07-21,2026-10-31
 taishinbank.com.tw,True,台新國際商業銀行股份有限公司,Taishin International Bank,1985-05-28,2026-10-31
 teams.com.tw,True,HAN LIN EDUCATION TECHNOLOGUY CO.LTD,,2014-06-07,2026-10-31

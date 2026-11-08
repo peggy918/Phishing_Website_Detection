@@ -43,3 +43,38 @@ taishinart.org.tw,taishin,related,twnic_whois,財團法人台新銀行文化藝�
 fast-line.tw,line,not_brand,twnic_whois,,claude,2026-10-31,brand_keyword_in_tranco,856012,WHOIS 隱私遮蔽，名稱與 LINE 無關
 moto-lines.com.tw,line,not_brand,twnic_whois,"Moto-Lines Co., Ltd.",claude,2026-10-31,brand_keyword_in_tranco,914735,"WHOIS「Moto-Lines Co., Ltd.」"
 hinetcdn.net.tw,cht,official,twnic_whois,Data Communication Business Group,claude,2026-10-31,brand_keyword_in_tranco,998177,WHOIS「Data Communication Business Group」，信箱 cht.com.tw（中華電信）
+post.gov.tw,post,official,gov_tw,,claude,2026-11-08,brands_yaml_unverified,,gov.tw 只能由政府機關註冊
+mof.gov.tw,mof,official,gov_tw,,claude,2026-11-08,brands_yaml_unverified,,gov.tw 只能由政府機關註冊
+nat.gov.tw,mof,official,gov_tw,,claude,2026-11-08,brands_yaml_unverified,,gov.tw 只能由政府機關註冊；財政部電子申報繳稅服務網
+whoscall.com,gogolook,official,wikidata,,claude,2026-11-08,brands_yaml_unverified,,Wikidata 官方網站(P856)：Q10853310 Whoscall
+signal.org,signal,official,wikidata,,claude,2026-11-08,brands_yaml_unverified,,Wikidata 官方網站(P856)：Q19718090 Signal
+microsoft.com,microsoft,official,wikidata,,claude,2026-11-08,brands_yaml_unverified,,Wikidata 官方網站(P856)：Q2283 Microsoft
+live.com,microsoft,official,wikidata,,claude,2026-11-08,brands_yaml_unverified,,Wikidata 官方網站(P856)：Q219136 Outlook.com（outlook.live.com）
+meta.com,meta,official,wikidata,,claude,2026-11-08,brands_yaml_unverified,,Wikidata 官方網站(P856)：Q380 Meta Platforms
+facebook.com,meta,official,wikidata,,claude,2026-11-08,brands_yaml_unverified,,Wikidata 官方網站(P856)：Q355 Facebook
+instagram.com,meta,official,wikidata,,claude,2026-11-08,brands_yaml_unverified,,Wikidata 官方網站(P856)：Q209330 Instagram
+telegram.org,telegram,official,wikidata,,claude,2026-11-08,brands_yaml_unverified,,Wikidata 官方網站(P856)：Q15616276 Telegram
+diptyqueparis.com,diptyque,official,wikidata,,claude,2026-11-08,brands_yaml_unverified,,Wikidata 官方網站(P856)：Q1227345 Diptyque
+byredo.com,byredo,official,wikidata,,claude,2026-11-08,brands_yaml_unverified,,Wikidata 官方網站(P856)：Q30595852 Byredo
+maisonmargiela.com,margiela,official,wikidata,,claude,2026-11-08,brands_yaml_unverified,,Wikidata 官方網站(P856)：Q1726925 Maison Margiela
+loewe.com,loewe,official,wikidata,,claude,2026-11-08,brands_yaml_unverified,,Wikidata 官方網站(P856)：Q966905 Loewe
+hoka.com,hoka,official,wikidata,,claude,2026-11-08,brands_yaml_unverified,,Wikidata 官方網站(P856)：Q16908664 Hoka
+salomon.com,salomon,official,wikidata,,claude,2026-11-08,brands_yaml_unverified,,Wikidata 官方網站(P856)：Q2120822 Salomon
+thombrowne.com,thombrowne,official,wikidata,,claude,2026-11-08,brands_yaml_unverified,,Wikidata 官方網站(P856)：Q3524805 Thom Browne
+ctbcbank.com,ctbc,official,wikidata,,claude,2026-11-08,brands_yaml_unverified,,Wikidata 官方網站(P856)：Q5100191 CTBC Bank
+fb.com,meta,official,rdap,"Meta Platforms, Inc.",claude,2026-11-08,brands_yaml_unverified,,RDAP 註冊者組織
+friday.tw,friday,unconfirmed,twnic_whois,,claude,2026-11-08,brands_yaml_unverified,,WHOIS 註冊者已遮蔽，Wikidata 查無；不進白名單
+newebpay.com,newebpay,unconfirmed,unverifiable,,claude,2026-11-08,brands_yaml_unverified,,Wikidata 查無，RDAP 註冊者查不到；不進白名單
+esunbank.com,esun,unconfirmed,unverifiable,,claude,2026-11-08,brands_yaml_unverified,,Wikidata 列的官網是 esunbank.com.tw；RDAP 查不到；不進白名單
+t.me,telegram,unconfirmed,unverifiable,,claude,2026-11-08,brands_yaml_unverified,,.me 沒有 RDAP 資料，Wikidata 查無；本來就不進白名單（no_whitelist）
+ecpay.com.tw,ecpay,official,twnic_whois,綠界科技股份有限公司,claude,2026-11-08,brands_yaml_unverified,,
+i-pass.com.tw,ipass,official,twnic_whois,IPASS CORPORATION,claude,2026-11-08,brands_yaml_unverified,,
+easycard.com.tw,easycard,official,twnic_whois,Taipei Smart Card Corp.,claude,2026-11-08,brands_yaml_unverified,,
+etmall.com.tw,etmall,official,twnic_whois,東森得易購股份有限公司,claude,2026-11-08,brands_yaml_unverified,,
+skm.com.tw,skm,official,twnic_whois,新光三越百貨股份有限公司,claude,2026-11-08,brands_yaml_unverified,,
+kingstone.com.tw,kingstone,official,twnic_whois,金石網絡股份有限公司,claude,2026-11-08,brands_yaml_unverified,,
+kfcclub.com.tw,kfc,official,twnic_whois,"Jardine Food Services (Taiwan) Co., Ltd.",claude,2026-11-08,brands_yaml_unverified,,
+foodpanda.com.tw,foodpanda,official,twnic_whois,Delivery Hero SE,claude,2026-11-08,brands_yaml_unverified,,
+t-cat.com.tw,tcat,official,twnic_whois,統一速達股份有限公司,claude,2026-11-08,brands_yaml_unverified,,
+7-11.com.tw,seven,official,twnic_whois,統一超商股份有限公司,claude,2026-11-08,brands_yaml_unverified,,
+bot.com.tw,bot,official,twnic_whois,臺灣銀行股份有限公司,claude,2026-11-08,brands_yaml_unverified,,

@@ -94,7 +94,7 @@ def import_gov_xml(session: Session, filename: str, content: bytes) -> ImportSum
         seen.add(int(no))
         level, key = match_key(n.host)
         flagged = n.registered_domain in review
-        if flagged:  # 疑似遭入侵的一般網站：只比完整主機名，避免把整個網域判成高風險
+        if flagged:  # 一般網站底下的子網域：只比完整主機名，避免把整個網域判成高風險
             level, key, needs_review = "hostname", n.host, needs_review + 1
         target = rec.get("brand_text", "")
         entries.append(BlacklistEntry(

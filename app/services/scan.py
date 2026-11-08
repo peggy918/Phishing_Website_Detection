@@ -61,6 +61,6 @@ def scan_url(session: Session, raw: str) -> ScanRequest:
 def _blacklist_reasons(entry) -> list[str]:
     date_text = entry.reported_on.strftime("%Y-%m-%d") if entry.reported_on else "日期不詳"
     first = f"已列入政府通報的詐騙網址清單（通報日期 {date_text}）"
-    if entry.needs_review:
-        first += "；此筆通報疑似遭入侵的網站，尚待人工確認"
+    if entry.needs_review:  # 政府通報為準；只說明通報範圍，不質疑通報本身（2026-11-08 本人決定）
+        first += "；通報範圍是這個完整主機名，同一網域底下的其他網址不受此筆通報影響"
     return [first, f"通報的冒用對象：{entry.target_text}"]

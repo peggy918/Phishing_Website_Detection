@@ -64,7 +64,7 @@ class BlacklistEntry(Base):
     site_created_at: Mapped[datetime | None] = mapped_column(DateTime)
     reported_on: Mapped[date | None] = mapped_column(Date)
     stopped_on: Mapped[date | None] = mapped_column(Date)
-    needs_review: Mapped[bool] = mapped_column(Boolean, default=False)
+    needs_review: Mapped[bool] = mapped_column(Boolean, default=False)  # 一般網站底下的子網域（review_domains）：只比主機名；欄名沿用舊稱
 
     batch: Mapped[ImportBatch] = relationship()
     brand: Mapped[Brand | None] = relationship()
@@ -91,8 +91,8 @@ class DomainReview(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     domain: Mapped[str] = mapped_column(String(255), unique=True)
     brand_key: Mapped[str] = mapped_column(String(50))
-    decision: Mapped[str] = mapped_column(String(20))    # official／related／not_brand／removed
-    evidence: Mapped[str] = mapped_column(String(30))    # manual_website／twnic_whois／unverifiable
+    decision: Mapped[str] = mapped_column(String(20))    # official／related／not_brand／removed／unconfirmed
+    evidence: Mapped[str] = mapped_column(String(30))    # manual_website／twnic_whois／wikidata／gov_tw／unverifiable
     registrant: Mapped[str] = mapped_column(Unicode(255), default="")
     reviewer: Mapped[str] = mapped_column(String(20))    # user／claude
     reviewed_on: Mapped[str] = mapped_column(String(10))

@@ -101,7 +101,7 @@ def import_xml():
     else:
         log_event("admin_import", admin_id=cookie.get("admin_id"), imported=summary.imported,
                   skipped=summary.skipped, needs_review=summary.needs_review)
-        flash(f"匯入 {summary.imported} 筆（略過 {summary.skipped} 筆，待確認 {summary.needs_review} 筆）", "ok")
+        flash(f"匯入 {summary.imported} 筆（略過 {summary.skipped} 筆，一般網站底下的子網域 {summary.needs_review} 筆只比完整主機名）", "ok")
     return redirect(url_for("admin.dashboard"))
 
 

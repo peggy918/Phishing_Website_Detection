@@ -4,12 +4,14 @@
 - domain       註冊網域
 - brand_key    對應 brands.yaml 的品牌 key
 - decision     official（列入 domains）／related（同集團，列入 related_domains）／
-               not_brand（正常網站但非該品牌，保留為台灣正常網域並標 brand_lookalike）／removed（從 brands.yaml 移除）
-- evidence     manual_website（本人上官網確認）／twnic_whois（TWNIC WHOIS 註冊者）／unverifiable（無法驗證）
+               not_brand（正常網站但非該品牌，保留為台灣正常網域並標 brand_lookalike）／removed（從 brands.yaml 移除）／
+               unconfirmed（仍列在 brands.yaml，但查不到歸屬佐證，不進白名單）
+- evidence     manual_website（本人上官網確認）／twnic_whois（TWNIC WHOIS 註冊者）／wikidata（Wikidata 官方網站 P856）／
+               rdap（RDAP 註冊者組織）／gov_tw（gov.tw 只能由政府機關註冊）／unverifiable（無法驗證）
 - registrant   WHOIS 註冊者（evidence＝twnic_whois 時）；個人註冊者已遮蔽，完整回應只存本機資料庫
 - reviewer     user（本人）／claude
 - reviewed_at  抽查日期
-- trigger      列入抽查的原因：not_in_tranco／brand_keyword_in_tranco
+- trigger      列入抽查的原因：not_in_tranco／brand_keyword_in_tranco／brands_yaml_unverified（brands.yaml 原本沒有佐證的網域）
 - tranco_rank  Tranco 排名（若有）
 - note         補充說明
 
@@ -24,8 +26,10 @@ ROOT = Path(__file__).resolve().parent.parent
 CSV_PATH = ROOT / "data" / "reference" / "domain_reviews.csv"
 MD_PATH = ROOT / "docs" / "domain-review.md"
 
-DECISIONS = {"official": "✓ 官方", "related": "△ 同集團", "not_brand": "○ 非該品牌", "removed": "✗ 移除"}
-EVIDENCE = {"manual_website": "本人官網確認", "twnic_whois": "TWNIC WHOIS", "unverifiable": "無法驗證"}
+DECISIONS = {"official": "✓ 官方", "related": "△ 同集團", "not_brand": "○ 非該品牌", "removed": "✗ 移除",
+             "unconfirmed": "？ 查無佐證"}
+EVIDENCE = {"manual_website": "本人官網確認", "twnic_whois": "TWNIC WHOIS", "wikidata": "Wikidata 官方網站",
+            "rdap": "RDAP 註冊者", "gov_tw": "gov.tw 政府網域", "unverifiable": "無法驗證"}
 REVIEWERS = {"user", "claude"}
 
 
@@ -56,7 +60,8 @@ def render_markdown(df: pd.DataFrame) -> str:
         "> WHOIS 完整回應含第三方個資，只存本機資料庫；此處只列公司名稱，個人已遮蔽。",
         "",
         "圖例：✓ 官方（列入 brands.yaml domains）　△ 同集團或合資（列入 related_domains）　"
-        "○ 正常網站但非該品牌（保留為台灣正常網域，標 brand_lookalike）　✗ 移除（從 brands.yaml 移除）",
+        "○ 正常網站但非該品牌（保留為台灣正常網域，標 brand_lookalike）　✗ 移除（從 brands.yaml 移除）　"
+        "？ 查無佐證（仍是官方網域清單的一部分，但不進白名單）",
         "",
         "| 判斷 | 筆數 |",
         "|---|---|",
@@ -64,7 +69,8 @@ def render_markdown(df: pd.DataFrame) -> str:
         "",
     ]
     for trigger, title in [("not_in_tranco", "一、品牌網域未出現在 Tranco"),
-                           ("brand_keyword_in_tranco", "二、Tranco .tw 網域含品牌關鍵字")]:
+                           ("brand_keyword_in_tranco", "二、Tranco .tw 網域含品牌關鍵字"),
+                           ("brands_yaml_unverified", "三、brands.yaml 原本沒有佐證的網域（2026-11-08 由 Claude 查證）")]:
         part = df[df["trigger"] == trigger]
         if part.empty:
             continue

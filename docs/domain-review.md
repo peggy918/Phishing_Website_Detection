@@ -3,14 +3,15 @@
 > 由 `python -m ml.domain_reviews` 依 `data/reference/domain_reviews.csv` 產生，請勿手動修改。
 > WHOIS 完整回應含第三方個資，只存本機資料庫；此處只列公司名稱，個人已遮蔽。
 
-圖例：✓ 官方（列入 brands.yaml domains）　△ 同集團或合資（列入 related_domains）　○ 正常網站但非該品牌（保留為台灣正常網域，標 brand_lookalike）　✗ 移除（從 brands.yaml 移除）
+圖例：✓ 官方（列入 brands.yaml domains）　△ 同集團或合資（列入 related_domains）　○ 正常網站但非該品牌（保留為台灣正常網域，標 brand_lookalike）　✗ 移除（從 brands.yaml 移除）　？ 查無佐證（仍是官方網域清單的一部分，但不進白名單）
 
 | 判斷 | 筆數 |
 |---|---|
-| ✓ 官方 | 20 |
+| ✓ 官方 | 51 |
 | △ 同集團 | 8 |
 | ○ 非該品牌 | 14 |
 | ✗ 移除 | 2 |
+| ？ 查無佐證 | 4 |
 
 ## 一、品牌網域未出現在 Tranco
 
@@ -65,3 +66,43 @@
 | fast-line.tw | line | ○ 非該品牌 | TWNIC WHOIS |  | Claude | 2026-10-31 | WHOIS 隱私遮蔽，名稱與 LINE 無關 |
 | moto-lines.com.tw | line | ○ 非該品牌 | TWNIC WHOIS | Moto-Lines Co., Ltd. | Claude | 2026-10-31 | WHOIS「Moto-Lines Co., Ltd.」 |
 | hinetcdn.net.tw | cht | ✓ 官方 | TWNIC WHOIS | Data Communication Business Group | Claude | 2026-10-31 | WHOIS「Data Communication Business Group」，信箱 cht.com.tw（中華電信） |
+
+## 三、brands.yaml 原本沒有佐證的網域（2026-11-08 由 Claude 查證）
+
+| 網域 | 品牌 | 判斷 | 依據 | 註冊者 | 確認人 | 日期 | 說明 |
+|---|---|---|---|---|---|---|---|
+| post.gov.tw | post | ✓ 官方 | gov.tw 政府網域 |  | Claude | 2026-11-08 | gov.tw 只能由政府機關註冊 |
+| mof.gov.tw | mof | ✓ 官方 | gov.tw 政府網域 |  | Claude | 2026-11-08 | gov.tw 只能由政府機關註冊 |
+| nat.gov.tw | mof | ✓ 官方 | gov.tw 政府網域 |  | Claude | 2026-11-08 | gov.tw 只能由政府機關註冊；財政部電子申報繳稅服務網 |
+| whoscall.com | gogolook | ✓ 官方 | Wikidata 官方網站 |  | Claude | 2026-11-08 | Wikidata 官方網站(P856)：Q10853310 Whoscall |
+| signal.org | signal | ✓ 官方 | Wikidata 官方網站 |  | Claude | 2026-11-08 | Wikidata 官方網站(P856)：Q19718090 Signal |
+| microsoft.com | microsoft | ✓ 官方 | Wikidata 官方網站 |  | Claude | 2026-11-08 | Wikidata 官方網站(P856)：Q2283 Microsoft |
+| live.com | microsoft | ✓ 官方 | Wikidata 官方網站 |  | Claude | 2026-11-08 | Wikidata 官方網站(P856)：Q219136 Outlook.com（outlook.live.com） |
+| meta.com | meta | ✓ 官方 | Wikidata 官方網站 |  | Claude | 2026-11-08 | Wikidata 官方網站(P856)：Q380 Meta Platforms |
+| facebook.com | meta | ✓ 官方 | Wikidata 官方網站 |  | Claude | 2026-11-08 | Wikidata 官方網站(P856)：Q355 Facebook |
+| instagram.com | meta | ✓ 官方 | Wikidata 官方網站 |  | Claude | 2026-11-08 | Wikidata 官方網站(P856)：Q209330 Instagram |
+| telegram.org | telegram | ✓ 官方 | Wikidata 官方網站 |  | Claude | 2026-11-08 | Wikidata 官方網站(P856)：Q15616276 Telegram |
+| diptyqueparis.com | diptyque | ✓ 官方 | Wikidata 官方網站 |  | Claude | 2026-11-08 | Wikidata 官方網站(P856)：Q1227345 Diptyque |
+| byredo.com | byredo | ✓ 官方 | Wikidata 官方網站 |  | Claude | 2026-11-08 | Wikidata 官方網站(P856)：Q30595852 Byredo |
+| maisonmargiela.com | margiela | ✓ 官方 | Wikidata 官方網站 |  | Claude | 2026-11-08 | Wikidata 官方網站(P856)：Q1726925 Maison Margiela |
+| loewe.com | loewe | ✓ 官方 | Wikidata 官方網站 |  | Claude | 2026-11-08 | Wikidata 官方網站(P856)：Q966905 Loewe |
+| hoka.com | hoka | ✓ 官方 | Wikidata 官方網站 |  | Claude | 2026-11-08 | Wikidata 官方網站(P856)：Q16908664 Hoka |
+| salomon.com | salomon | ✓ 官方 | Wikidata 官方網站 |  | Claude | 2026-11-08 | Wikidata 官方網站(P856)：Q2120822 Salomon |
+| thombrowne.com | thombrowne | ✓ 官方 | Wikidata 官方網站 |  | Claude | 2026-11-08 | Wikidata 官方網站(P856)：Q3524805 Thom Browne |
+| ctbcbank.com | ctbc | ✓ 官方 | Wikidata 官方網站 |  | Claude | 2026-11-08 | Wikidata 官方網站(P856)：Q5100191 CTBC Bank |
+| fb.com | meta | ✓ 官方 | RDAP 註冊者 | Meta Platforms, Inc. | Claude | 2026-11-08 | RDAP 註冊者組織 |
+| friday.tw | friday | ？ 查無佐證 | TWNIC WHOIS |  | Claude | 2026-11-08 | WHOIS 註冊者已遮蔽，Wikidata 查無；不進白名單 |
+| newebpay.com | newebpay | ？ 查無佐證 | 無法驗證 |  | Claude | 2026-11-08 | Wikidata 查無，RDAP 註冊者查不到；不進白名單 |
+| esunbank.com | esun | ？ 查無佐證 | 無法驗證 |  | Claude | 2026-11-08 | Wikidata 列的官網是 esunbank.com.tw；RDAP 查不到；不進白名單 |
+| t.me | telegram | ？ 查無佐證 | 無法驗證 |  | Claude | 2026-11-08 | .me 沒有 RDAP 資料，Wikidata 查無；本來就不進白名單（no_whitelist） |
+| ecpay.com.tw | ecpay | ✓ 官方 | TWNIC WHOIS | 綠界科技股份有限公司 | Claude | 2026-11-08 |  |
+| i-pass.com.tw | ipass | ✓ 官方 | TWNIC WHOIS | IPASS CORPORATION | Claude | 2026-11-08 |  |
+| easycard.com.tw | easycard | ✓ 官方 | TWNIC WHOIS | Taipei Smart Card Corp. | Claude | 2026-11-08 |  |
+| etmall.com.tw | etmall | ✓ 官方 | TWNIC WHOIS | 東森得易購股份有限公司 | Claude | 2026-11-08 |  |
+| skm.com.tw | skm | ✓ 官方 | TWNIC WHOIS | 新光三越百貨股份有限公司 | Claude | 2026-11-08 |  |
+| kingstone.com.tw | kingstone | ✓ 官方 | TWNIC WHOIS | 金石網絡股份有限公司 | Claude | 2026-11-08 |  |
+| kfcclub.com.tw | kfc | ✓ 官方 | TWNIC WHOIS | Jardine Food Services (Taiwan) Co., Ltd. | Claude | 2026-11-08 |  |
+| foodpanda.com.tw | foodpanda | ✓ 官方 | TWNIC WHOIS | Delivery Hero SE | Claude | 2026-11-08 |  |
+| t-cat.com.tw | tcat | ✓ 官方 | TWNIC WHOIS | 統一速達股份有限公司 | Claude | 2026-11-08 |  |
+| 7-11.com.tw | seven | ✓ 官方 | TWNIC WHOIS | 統一超商股份有限公司 | Claude | 2026-11-08 |  |
+| bot.com.tw | bot | ✓ 官方 | TWNIC WHOIS | 臺灣銀行股份有限公司 | Claude | 2026-11-08 |  |

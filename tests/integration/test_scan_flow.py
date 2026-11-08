@@ -45,7 +45,9 @@ def test_blacklist_platform_matches_full_hostname_only(db, low_model):
 def test_needs_review_matches_hostname_only(db, low_model):
     hit = scan(db, "https://niconsortiu.ecpay.com/")           # 886
     assert hit.decided_by == "blacklist"
-    assert any("尚待人工確認" in reason for reason in _reasons(hit))
+    reasons = _reasons(hit)
+    assert "通報範圍是這個完整主機名" in reasons[0]
+    assert not any("待" in r and "確認" in r for r in reasons)   # 政府通報為準，不再寫「尚待人工確認」
     assert scan(db, "https://www.ecpay.com/").decided_by == "model"
 
 

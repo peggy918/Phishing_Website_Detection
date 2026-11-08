@@ -17,6 +17,7 @@ ROOT = Path(__file__).resolve().parent.parent
 OUT_DIR = ROOT / "data" / "raw" / "whois"
 SUMMARY = ROOT / "data" / "reference" / "whois_summary.csv"
 SERVER = ("whois.twnic.net.tw", 43)
+MASKED = "(個人，已遮蔽)"
 
 
 def query(domain: str, retries: int = 2) -> str:
@@ -68,12 +69,19 @@ def main(domains: list[str]) -> None:
         print(d, "ok")
         time.sleep(8)  # TWNIC 有頻率限制，查太快會被拒絕連線
 
-    # 摘要由所有快取檔重建
+    # 摘要由所有快取檔重建；摘要裡已手動遮蔽的個人註冊者要保留遮蔽（2026-11-08 曾因重建而還原成明文）
+    masked = set()
+    if SUMMARY.exists():
+        with open(SUMMARY, encoding="utf-8-sig", newline="") as f:
+            masked = {r["domain"] for r in csv.DictReader(f) if r["registrant_zh"].startswith("(個人")}
     rows = []
     for p in sorted(OUT_DIR.glob("*.txt")):
         text = p.read_text(encoding="utf-8")
         found = "No Found" not in text and "Domain Name:" in text
-        rows.append({"domain": p.stem, "found": found, **(parse(text) if found else {}),
+        info = parse(text) if found else {}
+        if p.stem in masked:
+            info.update(registrant_zh=MASKED, registrant_en="")
+        rows.append({"domain": p.stem, "found": found, **info,
                      "queried_at": time.strftime("%Y-%m-%d", time.localtime(p.stat().st_mtime))})
     with open(SUMMARY, "w", newline="", encoding="utf-8-sig") as f:
         w = csv.DictWriter(f, fieldnames=["domain", "found", "registrant_zh", "registrant_en",

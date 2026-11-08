@@ -39,9 +39,9 @@ def test_user_content_and_short_link_domains_excluded(rows, domain):
     assert domain not in rows
 
 
-@pytest.mark.parametrize("domain", ["newebpay.com", "ctbcbank.com", "hoka.com", "byredo.com"])
+@pytest.mark.parametrize("domain", ["newebpay.com", "esunbank.com", "friday.tw"])
 def test_domains_without_ownership_evidence_excluded(rows, domain):
-    # 只確認存在於 Tranco，或 AI 依常識整理：等核對後才能跳過模型
+    # 2026-11-08 查證後仍找不到歸屬佐證（friday.tw 的 WHOIS 註冊者被遮蔽）：交給模型判斷
     assert domain not in rows
 
 
@@ -52,6 +52,9 @@ def test_domains_without_ownership_evidence_excluded(rows, domain):
     ("cathaybk.com.tw", "official", "twnic_whois", "claude"),
     ("shopee.tw", "official", "twnic_whois", "claude"),
     ("dcard.tw", "official", "v2fly", "v2fly"),
+    ("ecpay.com.tw", "official", "twnic_whois", "claude"),
+    ("hoka.com", "official", "wikidata", "claude"),
+    ("mof.gov.tw", "official", "gov_tw", "claude"),
 ])
 def test_evidence_is_recorded(rows, domain, decision, evidence, reviewer):
     r = rows[domain]
@@ -61,6 +64,23 @@ def test_evidence_is_recorded(rows, domain, decision, evidence, reviewer):
 def test_rejected_review_results_never_whitelisted(rows):
     for domain in ["dcard.io", "linefriends.com.tw", "teams.com.tw", "chinapost.com.tw"]:
         assert domain not in rows
+
+
+@pytest.mark.parametrize("registrant", ["", "(個人，已遮蔽)", "(Redacted for privacy)"])
+def test_whois_without_identifiable_registrant_is_not_evidence(session, registrant):
+    # friday.tw 的 WHOIS 有資料，但註冊者被遮蔽，不能證明是哪家公司的網域
+    record = session.scalar(select(WhoisRecord).where(WhoisRecord.domain == "cathaybk.com.tw"))
+    record.registrant = registrant
+    session.flush()
+    assert "cathaybk.com.tw" not in {r["domain"] for r in whitelist_rows(session)}
+
+
+def test_rejected_review_overrides_whois(session):
+    from app.models import DomainReview
+    session.add(DomainReview(domain="cathaybk.com.tw", brand_key="cathay", decision="unconfirmed",
+                             evidence="twnic_whois", reviewer="claude", reviewed_on="2026-11-08"))
+    session.flush()
+    assert "cathaybk.com.tw" not in {r["domain"] for r in whitelist_rows(session)}
 
 
 def test_no_whitelist_entries_are_real_brand_domains():

@@ -74,11 +74,16 @@ def import_whois_raw(session: Session, folder: Path) -> int:
 
 def evidence_for(domain: str, brand: dict, reviews: dict[str, DomainReview],
                  whois: dict[str, WhoisRecord]) -> tuple[str, str] | None:
-    """回傳 (依據, 確認人)；沒有歸屬佐證時回傳 None。只出現在 Tranco 不算：那只代表網域存在。"""
+    """回傳 (依據, 確認人)；沒有歸屬佐證時回傳 None。只出現在 Tranco 不算：那只代表網域存在。
+
+    有核對紀錄時以紀錄為準，判定不採用（例如 WHOIS 註冊者被遮蔽）就不再看其他來源。
+    WHOIS 只有在註冊者是可辨識的公司或機關時才算佐證；空白或已遮蔽的個人資料不算。
+    """
     review = reviews.get(domain)
-    if review and review.decision in ACCEPTED_DECISIONS:
-        return review.evidence, review.reviewer
-    if domain in whois:
+    if review:
+        return (review.evidence, review.reviewer) if review.decision in ACCEPTED_DECISIONS else None
+    record = whois.get(domain)
+    if record and record.registrant and not record.registrant.startswith("("):
         return "twnic_whois", "claude"
     if brand.get("source") == "v2fly":
         return "v2fly", "v2fly"
