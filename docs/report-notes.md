@@ -1,7 +1,7 @@
 # 報告素材紀錄
 
 每完成一個階段在此記錄可寫進報告的素材，註明對應頁碼。
-標示「AI 產生」的程式與測試需由本人核對後勾選。核對時照 `docs/review-checklist.md` 逐行做（每個檔案該確認什麼都寫成一句白話），勾完後再同步到本檔。
+標示「AI 產生」的程式與測試，本人以精簡核對清單 `docs/review-checklist.md` 的 5 個步驟核對（2026-11-09 本人決定，見文末「本人核對方式」）；各階段列出的 AI 產生檔案不逐檔勾選。
 
 ---
 
@@ -100,13 +100,13 @@
 - 與政府黑名單無重疊。
 - **待辦**：加入 Tranco 熱門 .tw 網域；正常資料目前只有網域，沒有路徑，階段 2 需注意「網址長短」造成的捷徑。
 
-### AI 產生內容（待本人核對）
+### AI 產生內容
 - `config/brands.yaml` 官方網域：**2026-11-08 已由 AI 查證，不需本人上官網**（本人指出：要本人連上去確認，萬一不是官網就等於進了可疑網站）。查證方式與結果見本檔「2026-11-08 品牌網域查證」。
 - `config/rules.yaml`：可疑 TLD 依政府資料統計整理（政府資料為可信來源，不需本人再核對）。
-- [ ] `config/rules.yaml`：平台、短網址、關鍵字清單由 AI 整理。
+- `config/rules.yaml`：平台、短網址、關鍵字清單由 AI 整理。
 - `data/reference/tw_popular_domains.txt`：AI 整理；71 個網域都出現在 Tranco 排行，且都不在政府詐騙清單（`ml/verify_domains.py`），不需本人逐一核對。
-- [ ] `app/services/normalizer.py`、`app/config_loader.py`、`ml/clean_gov.py`、`ml/clean_kaggle.py`、`ml/build_tw_legit.py`
-- [ ] `tests/unit/test_normalizer_stage0.py`、`tests/unit/test_clean_gov.py`（fixture `tests/fixtures/gov_sample.xml` 為原始 XML 的 15 筆真實紀錄）
+- `app/services/normalizer.py`、`app/config_loader.py`、`ml/clean_gov.py`、`ml/clean_kaggle.py`、`ml/build_tw_legit.py`
+- `tests/unit/test_normalizer_stage0.py`、`tests/unit/test_clean_gov.py`（fixture `tests/fixtures/gov_sample.xml` 為原始 XML 的 15 筆真實紀錄）
 
 ### 開發中發現（→ p.6–7 G2 或 p.15 G6 素材）
 - tldextract 預設不使用 PSL private 區段，`shopee-tw.github.io` 的註冊網域是 `github.io`。原本的測試預期錯誤，修正後確認改由 `rules.yaml` 的平台清單統一判斷比對層級。
@@ -161,9 +161,9 @@
 - 台灣正常網域 97% 是 .tw、政府詐騙只有 1% → 模型可能學成「.tw＝正常」，原本要避免的「台灣網址＝詐騙」反過來了。政府資料中仍有 .tw 詐騙（101shop.tw、rakutentcstore.com.tw），會被漏判。
 - 階段 2 需要決定處理方式（例如替正常網域補上真實路徑樣式、只用主機名特徵比較、或分開評估），屆時與本人討論。
 
-### AI 產生內容（待本人核對）
-- [ ] `app/services/normalizer.py`（完整版）、`app/services/brand_match.py`、`app/services/features.py`
-- [ ] `tests/unit/test_normalizer.py`、`tests/unit/test_brand_match.py`、`tests/unit/test_features.py`
+### AI 產生內容
+- `app/services/normalizer.py`（完整版）、`app/services/brand_match.py`、`app/services/features.py`
+- `tests/unit/test_normalizer.py`、`tests/unit/test_brand_match.py`、`tests/unit/test_features.py`
 - 測試共 169 項。測試裡的預期值有一次是 AI 憑印象寫錯的（「蝦皮.tw」的 punycode），已改成以反向解碼驗證，不依賴記憶中的值。
 
 ---
@@ -196,10 +196,10 @@
 3. **仿冒變體的弱點**：少一字、相鄰互換這類變形保留了 `.com.tw` 與正常單字樣貌，模型容易當成正常網站。品牌近似比對只比 6 字以上的關鍵字，momo、line 等短品牌名的變形抓不到。
 4. **Kaggle 正常網址在中風險門檻下有 19.3% 被標中風險**：中風險門檻是為了抓到 90% 詐騙設的，代價是國際一般網址的警示偏多；台灣正常網域則只有 1.3%。
 
-### AI 產生內容（待本人核對）
-- [ ] `ml/build_dataset.py`、`ml/make_variants.py`、`ml/train.py`
-- [ ] `tests/unit/test_build_dataset.py`
-- [ ] `docs/dataset-plan.md`
+### AI 產生內容
+- `ml/build_dataset.py`、`ml/make_variants.py`、`ml/train.py`
+- `tests/unit/test_build_dataset.py`
+- `docs/dataset-plan.md`
 
 ### 第二版：改善品牌比對（2026-11-01，本人決定「先改善再定案」）（→ p.6–7 G2、p.8–12 G3）
 **避免看著測試集調整**：仿冒變體依品牌對半分（`make_variants.brand_split`）：
@@ -266,8 +266,8 @@
 
 **更正**：第一版子群 gov_brand／gov_nobrand 誤用「冒用對象文字」分組，測試 B 顯示 269／2 筆；改依主機名實際命中後為 188／83 筆。Stage 2 第一版的該列數字不可引用。
 
-### AI 產生內容（待本人核對，階段 2 追加）
-- [ ] `app/services/risk.py`、`tests/unit/test_risk.py`、`ml/tune_brand.py`
+### AI 產生內容（階段 2 追加）
+- `app/services/risk.py`、`tests/unit/test_risk.py`、`ml/tune_brand.py`
 - brands.yaml 新增的 7 個國際品牌：2026-11-08 已由 AI 以 Wikidata 官方網站欄位查證，7 個都相符。
 
 ### 參數搜尋與種子穩定度（2026-11-03，本人要求，→ p.8–12 G3）
@@ -312,12 +312,12 @@
 - 模型 metadata 記錄的 brands 版本為 2026.11.01-2，目前為 2026.11.03-2。之後只加了 no_whitelist 與改品牌顯示名稱，不影響特徵，所以未重新訓練。
 - 管理頁版面只在桌面寬度確認內容與無水平捲動，未完整目視。
 
-### AI 產生內容（待本人核對）
-- [ ] `app/models/`、`app/db.py`、`app/extensions.py`、`app/errors.py`、`app/cli.py`、`app/__init__.py`
-- [ ] `app/controllers/`、`app/views/`、`app/static/style.css`
-- [ ] `app/services/`：blacklist、gov_import、predictor、reasons、reference_data、scan
-- [ ] `migrations/`、`alembic.ini`、`scripts/setup_db.sql`
-- [ ] `tests/integration/`、`tests/helpers.py`、`tests/unit/test_reference_data.py`
+### AI 產生內容
+- `app/models/`、`app/db.py`、`app/extensions.py`、`app/errors.py`、`app/cli.py`、`app/__init__.py`
+- `app/controllers/`、`app/views/`、`app/static/style.css`
+- `app/services/`：blacklist、gov_import、predictor、reasons、reference_data、scan
+- `migrations/`、`alembic.ini`、`scripts/setup_db.sql`
+- `tests/integration/`、`tests/helpers.py`、`tests/unit/test_reference_data.py`
 
 ### 資料庫設定腳本的靜默失敗（2026-11-04，→ p.15 G6 錯誤追查素材）
 - 現象：`scripts/setup_db.sql` 開頭有中文註解時，sqlcmd 沒有任何錯誤訊息，但後面的指令沒有執行。交給本人執行前，用只有 SELECT 的測試腳本試跑才發現。
@@ -372,10 +372,10 @@
 ### 開發工具
 `.mcp.json` 加入 chrome-devtools 與 playwright 兩個 MCP（版本固定、瀏覽器設定檔隔離、關閉 Chrome DevTools 的使用統計與 CrUX 回傳）。只用於開發測試自己的網站；**不可拿來開啟被檢查的可疑網址**。
 
-### AI 產生內容（待本人核對）
-- [ ] `app/logging/`、`wsgi.py`、`app/static/app.js`
-- [ ] `tests/e2e/`、`tests/integration/test_logging.py`
-- [ ] `README.md`、`.github/workflows/ci.yml`、`.mcp.json`
+### AI 產生內容
+- `app/logging/`、`wsgi.py`、`app/static/app.js`
+- `tests/e2e/`、`tests/integration/test_logging.py`
+- `README.md`、`.github/workflows/ci.yml`、`.mcp.json`
 
 ### WHOIS 個資與佐證改以資料庫為準（2026-11-06，本人提出，→ p.14 G5 資料保護、p.10 ERD）
 - **發現**：推上公開 GitHub 前掃描，WHOIS 原始檔含第三方個人姓名、Gmail、電話，也有聯絡人資料，而且已在舊 commit 中。
@@ -403,7 +403,7 @@
 - 資料流程圖原本寫「平台與待確認比完整主機名」，與「政府通報不標待確認」的決定不一致，改為「平台與指定子網域比主機名」並重新產生（`docs/report/make_diagrams.py`）。
 
 ### MCP 測試比較（2026-11-05，→ p.16 G7，摘要可放 p.12）
-- [ ] **本節與 `docs/results/mcp-comparison.md` 由 AI 操作瀏覽器、判斷結果並撰寫，需由本人核對後勾選。**
+- **本節與 `docs/results/mcp-comparison.md` 由 AI 操作瀏覽器、判斷結果並撰寫**；本人以精簡核對清單步驟 5 確認結論。
 - 完整內容：`docs/results/mcp-comparison.md`。測試用腳本、JUnit 報告與呼叫統計（不進 git）：`C:\Users\User\AppData\Roaming\Claude\side-session-notes\local_387748c2-4f5c-48c4-92c4-1a65c77d6202\mcp-comparison-evidence\`。
 - **必須如實寫明**：這是 AI 操作瀏覽器的模擬測試，不是真人測試，**不能當作 G1 訪談或使用者驗證的證據**；MCP 由 AI 判斷結果，每次操作可能不同；測試在本機、暫存 SQLite，沒有經過真實網路或 Cloudflare Tunnel。
 - **方法**：同樣 10 個情境，以既有 pytest E2E 為對照，再用 Playwright MCP 與 Chrome DevTools MCP 各跑一次。MCP 使用真實 LightGBM 與真實政府 XML；pytest 使用假模型。
@@ -422,7 +422,7 @@
 - **F2–F8 未修正**：F2 牽涉品牌比對特徵，改了要重新訓練，列為已知限制（→ p.14 或 p.16）；F3 須在複審對外測試前實測。
 - **結論**：三種工具在 10 個情境都沒有測出功能失敗。pytest 適合回歸測試，Playwright MCP 適合探索操作，DevTools MCP 適合診斷（效能、標頭、CSP）。新問題多半來自 AI 多試了腳本以外的輸入，補上測試後 pytest 也抓得到。
 - **沒測到**：真實模型下的中風險頁面、SQL Server、Tunnel、真人、真實手機、其他瀏覽器。
-- **G7「撰寫測試以外的人核對」**：本比較也是 AI 協助審查的一部分，不等於他人核對；本人核對方式待填。
+- **G7「撰寫測試以外的人核對」**：本比較也是 AI 協助審查的一部分，不等於他人核對；本人核對方式見文末「本人核對方式」。
 
 **2026-11-08 重跑（第三版模型，`933aafd`，本人要求）**：完整內容見 `mcp-comparison.md` 第 11 節。
 - **結果**：10 個情境兩個 MCP 仍全部通過；pytest E2E 27 項全過，比上次多 1 項 F1 測試。
@@ -550,6 +550,25 @@
 
 **沒有重做的部分**：MCP 測試比較（2026-11-05）用的是第二版模型，未重跑。
 
-**AI 產生內容（待本人核對）**
-- [ ] `ml/clean_gov.py` 的去重與訓練收錄改動、`tests/unit/test_clean_gov.py` 兩項測試
+**AI 產生內容**
+- `ml/clean_gov.py` 的去重與訓練收錄改動、`tests/unit/test_clean_gov.py` 兩項測試
 - 本節的比較表：數字取自兩份由程式產生的評估檔（`stage2-evaluation-v2.md`、`stage2-evaluation.md`），不需本人核對。
+
+## 2026-11-09 本人核對方式（→ P3 p.25、G4 p.13、G7 p.16）
+
+**本人決定：改用精簡核對清單**（`docs/review-checklist.md`），不逐檔核對 AI 產生的程式。
+- 依據評分表：第 1 頁「優先檢查出錯時影響最大的部分」「測試方法依專題需要選用，不必全做」；P3 只要求「選一項你檢查過的功能」說明清楚。委員會現場核對本人理解，所以重點是本人能說明與操作，不是勾完每個檔案。
+- 原本的逐檔清單（約 50 項）由 AI 列得過細，已改為 5 個步驟、約 30–40 分鐘：
+  1. 跑全部測試（389 項）。
+  2. 在網站試 5 個網址：黑名單、官方網域、品牌規則拉高風險、追蹤參數不變性、無效輸入。結果已由 AI 先以本機 SQL Server 與 `lightgbm-20261108-224947` 唯讀確認。
+  3. 讀懂正規化的 7 條規則（P3 選這一項）。
+  4. 確認品牌規則（`risk.py`）是本人 11/3 的決定。
+  5. 看 MCP 比較的結論。
+- **報告寫法**：本人核對上述 5 項；其餘 AI 產生的程式如實寫「由 AI 撰寫，以 389 項自動化測試、刻意改錯 21 處、AI 瀏覽器模擬操作驗證，未逐檔由本人核對」。
+- **狀態：2026-11-10 本人完成 5 步驟**（記錄於 `docs/review-checklist.md`）：
+  1. 全部測試：`389 passed, 1 warning in 183.07s`。
+  2. 網站 5 個網址（黑名單、官方網域、品牌規則、追蹤參數、無效輸入）：本人確認都符合預期結果。
+  3. 正規化：本人的說明是「如果沒有正規化，會讓模型學到沒有意義的特徵」。對應報告素材：政府資料 533 筆帶 fbclid 等追蹤參數，不去除的話模型可能學成「有追蹤參數＝詐騙」的捷徑（見階段 0、1）。
+  4. 品牌規則：本人確認與 11/3 的決定一致。
+  5. MCP 比較結論：本人同意。
+- 初稿第 13、14、16 頁的「本人核對」已改為上述實際內容。
