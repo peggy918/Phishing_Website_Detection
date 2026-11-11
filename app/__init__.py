@@ -37,6 +37,14 @@ def create_app(config: dict | None = None):
     if not app.config["SECRET_KEY"] or app.config["SECRET_KEY"] == "change-me":
         raise RuntimeError("請在 .env 設定 FLASK_SECRET_KEY")
 
+    # 雲端（Cloud Run）前面有一層代理，remote_addr 都是代理的位址，所有人會共用速率限制額度。
+    # 設了 TRUSTED_PROXY_HOPS 才信任 X-Forwarded-For 的最後幾段；只取來源 IP，不改 scheme：
+    # 改成 https 會讓 Flask-WTF 檢查 Referer，而本站送出 no-referrer，表單會全被擋（F3）。
+    hops = int(os.environ.get("TRUSTED_PROXY_HOPS", "0"))
+    if hops:
+        from werkzeug.middleware.proxy_fix import ProxyFix
+        app.wsgi_app = ProxyFix(app.wsgi_app, x_for=hops, x_proto=0, x_host=0, x_port=0, x_prefix=0)
+
     configure(app.config["LOG_PATH"])
     engine = make_engine(app.config.get("DATABASE_URL"))
     app.config["SESSION_FACTORY"] = sessionmaker(engine, expire_on_commit=False)

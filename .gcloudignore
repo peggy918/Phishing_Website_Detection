@@ -1,0 +1,25 @@
+# gcloud run deploy --source 上傳的檔案清單。預設全部不上傳，只放行建置雲端展示版需要的檔案。
+# 特別注意：.env（密鑰）、data/raw/whois（含第三方個資）、docs、tests 都不上傳。
+# 檢查實際上傳哪些檔案：gcloud meta list-files-for-upload
+/*
+!/Dockerfile
+!/requirements.txt
+!/alembic.ini
+!/wsgi.py
+!/app/
+!/config/
+!/migrations/
+!/data/
+/data/*
+!/data/reference/
+!/data/raw/
+/data/raw/*
+!/data/raw/*.xml
+!/scripts/
+/scripts/*
+!/scripts/build_sqlite.py
+!/models_store/
+/models_store/*
+!/models_store/lightgbm-20261108-224947/
+__pycache__/
+*.pyc

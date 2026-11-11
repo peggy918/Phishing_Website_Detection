@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "netcatch",
+      "runtimeExecutable": "E:\\11501ML\\Phishing_Website_Detection\\.venv\\Scripts\\flask.exe",
+      "runtimeArgs": ["--app", "wsgi", "run", "--port", "5000"],
+      "port": 5000
+    }
+  ]
+}
